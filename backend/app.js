@@ -11,10 +11,12 @@
 
 const express = require('express');
 const ExpressError = require('./expressError')
+const morgan = require('morgan')
 const userRoutes = require('./routes/users')
 
 const app = express();
 app.use(express.json());
+app.use(morgan('dev'))
 app.use('/users', userRoutes)
 
 
@@ -57,19 +59,7 @@ app.use((error, req, res, next) => {
 
 
 
-
-
-
-
-
-
-
-/**
- * MOVE TO SERVER.JS
- **/
-app.listen(3000, ()=>{
-    console.log('App on port 3000')
-})
+module.exports = app;
 
 
 // //Test route for errors and error handling.

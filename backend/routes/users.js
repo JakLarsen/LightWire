@@ -11,6 +11,7 @@
 
 const express = require('express');
 const router = new express.Router();
+const db = require('../db')
 const {checkForPassword} = require('../middleware/examples')
 
 
@@ -23,9 +24,12 @@ const {checkForPassword} = require('../middleware/examples')
  * GET '/users'
  * Authorization: Admin
  **/
-router.get('/', checkForPassword, (req,res,next) => {
+router.get('/', async (req,res,next) => {
     try{
-        return res.json({users: ['1', '2']})
+        const results = await db.query(
+            `SELECT * FROM users`
+        )
+        return res.json({users: results.rows})
     }
     catch(e){
         return next(e);
