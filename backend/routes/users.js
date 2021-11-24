@@ -13,6 +13,7 @@ const express = require('express');
 const router = new express.Router();
 const db = require('../db')
 const {checkForPassword} = require('../middleware/examples')
+const {User} = require('../models/user')
 
 
 
@@ -26,10 +27,8 @@ const {checkForPassword} = require('../middleware/examples')
  **/
 router.get('/', async (req,res,next) => {
     try{
-        const results = await db.query(
-            `SELECT * FROM users`
-        )
-        return res.json({users: results.rows})
+        const users = await User.getAll()
+        return res.json({users: users})
     }
     catch(e){
         return next(e);
@@ -37,15 +36,12 @@ router.get('/', async (req,res,next) => {
 })
 
 /**
- * GET '/users/id
+ * GET '/users/:username'
  * Authorization: Admin or Same User
  **/
-router.get('/:id', (req,res,next) => {
+router.get('/:username', (req,res,next) => {
     try{
-        let USERS = ['1','2']
-        const {id} = req.params
-        const user = USERS.find(user => user === id)
-        return res.json({user: user})
+        
     }
     catch(e){
         return next(e);
@@ -53,27 +49,33 @@ router.get('/:id', (req,res,next) => {
 })
 
 /**
- * POST '/users
- * Authorization: Admin
- **/
-router.post('/', (req,res) => {
+ * POST '/users' is taken care of by POST '/auth/register'
+ */
 
+/**
+ * PATCH '/users/:username'
+ * Authorization: Admin or Same User
+ **/
+router.patch('/:username', (req,res) => {
+    try{
+        
+    }
+    catch(e){
+        next(e)
+    }
 })
 
 /**
- * PATCH '/users/id
+ * DELETE '/users/:username
  * Authorization: Admin or Same User
  **/
-router.patch('/:id', (req,res) => {
-
-})
-
-/**
- * DELETE '/users/id
- * Authorization: Admin or Same User
- **/
-router.delete('/:id', (req,res) => {
-
+router.delete('/:username', (req,res) => {
+    try{
+        
+    }
+    catch(e){
+        next(e)
+    }
 })
 
 module.exports = router;
