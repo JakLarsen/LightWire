@@ -10,7 +10,7 @@
 
 
 const db = require('../db')
-const {ExpressError} = require('../expressError')
+const {UnauthorizedError} = require('../expressError')
 const bcrypt = require('bcrypt')
 const { BCRYPT_WORK_FACTOR } = require('../config');
 
@@ -19,9 +19,44 @@ const { BCRYPT_WORK_FACTOR } = require('../config');
 
 class User{
 
+
+    /**
+     * Authenticate a username and password combination
+     * 
+     * Returns {
+     *  username: 'USERNAME', 
+     *  password: 'PASSWORD', 
+     *  first_name: 'FIRST_NAME',
+     *  last_name: 'LAST_NAME',
+     *  email: 'EMAIL', 
+     *  phone: 'PHONE',
+     *  is_admin: true or false
+     * }
+     **/
+    static async authenticate(username, password){
+
+        const results = await db.query(
+            `
+            SELECT username, password, first_name, last_name, email, phone, is_admin
+            FROM users
+            WHERE username = $1`,
+            [username]
+        );
+        const ourUser = results.rows[0]
+        if (ourUser){
+            const isValid = await bcrypt.compare(password, ourUser.password)
+            if (isValid){
+                delete ourUser.password;
+                return ourUser
+            }
+        }
+        throw new UnauthorizedError("Unauthorized: Invalid username/password")
+    }
+
     /**
      * Registers a new user
-     * Returns {username: 'username'}
+     * 
+     * Returns {username: 'USERNAME'}
      **/
     static async register({username, password, first_name, last_name, email, phone}){
         try{
@@ -71,6 +106,7 @@ class User{
 
     /**
      * Retrieves a list of all users
+     * 
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
     static async getAll(){

@@ -14,10 +14,12 @@ const ExpressError = require('./expressError')
 const morgan = require('morgan')
 const userRoutes = require('./routes/users')
 const authRoutes = require('./routes/auth')
+const {authenticateJWT} = require('./middleware/auth')
 
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'))
+app.use(authenticateJWT)
 app.use('/users', userRoutes)
 app.use('/auth', authRoutes)
 

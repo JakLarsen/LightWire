@@ -8,6 +8,7 @@
 "use strict";
 
 const SECRET_KEY = process.env.SECRET_KEY || "secret-dev";
+const JWT_OPTIONS = { expiresIn: 60 * 60 };
 
 const PORT = +process.env.PORT || 3001;
 
