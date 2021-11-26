@@ -10,9 +10,10 @@
 
 
 const db = require('../db')
-const {UnauthorizedError} = require('../expressError')
+const {UnauthorizedError, NotFoundError, ExpressError} = require('../expressError')
 const bcrypt = require('bcrypt')
 const { BCRYPT_WORK_FACTOR } = require('../config');
+const {sqlForPartialUpdate} = require('../helpers/sql')
 
 
 
@@ -129,8 +130,67 @@ class User{
         }
     }
 
+    /**
+     * Retrieves a user by username
+     * 
+     * Returns [{username, first_name, last_name, email, phone}, ...]
+     **/
+    static async getByUsername(username){
+        try{
+            const results = await db.query(
+                `SELECT 
+                    username, 
+                    first_name, 
+                    last_name, 
+                    email, 
+                    phone 
+                FROM users
+                WHERE username = $1`,
+                [username]
+            );
+            const user = results.rows[0]
+            return user
+        }
+        catch(e){
+            throw new ExpressError('getByUsername() Error')
+        }
+    }
 
-
+    /**
+     * Does a partial update of user
+     * 
+     * Returns [{username, first_name, last_name, email, phone}, ...]
+     **/
+    static async update(username, data) {
+        if (data.password) {
+          data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        }
+    
+        const { setCols, values } = sqlForPartialUpdate(
+            data,
+            {
+              firstName: "first_name",
+              lastName: "last_name",
+              isAdmin: "is_admin",
+            });
+        const usernameVarIdx = "$" + (values.length + 1);
+    
+        const querySql = `UPDATE users 
+                          SET ${setCols} 
+                          WHERE username = ${usernameVarIdx} 
+                          RETURNING username,
+                                    first_name,
+                                    last_name,
+                                    email,
+                                    phone`;
+        const result = await db.query(querySql, [...values, username]);
+        const user = result.rows[0];
+    
+        if (!user) throw new NotFoundError(`No user: ${username}`);
+    
+        delete user.password;
+        return user;
+    }
 }
 
 

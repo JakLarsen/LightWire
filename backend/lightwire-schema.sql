@@ -26,3 +26,15 @@ CREATE TABLE accounts(
     account_type TEXT NOT NULL
 );
 
+CREATE TABLE transactions(
+    id SERIAL PRIMARY KEY,
+    acc_recieving_id INTEGER
+        REFERENCES accounts ON DELETE CASCADE,
+    acc_sending_id INTEGER
+        REFERENCES accounts ON DELETE CASCADE,
+    amount FLOAT NOT NULL DEFAULT 0,
+    transaction_date DATE,
+    billing_period INTEGER,
+    transaction_type TEXT NOT NULL
+);
+

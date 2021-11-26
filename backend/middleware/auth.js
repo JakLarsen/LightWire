@@ -42,7 +42,6 @@ function ensureLoggedIn(req,res,next){
 }
 
 function ensureAdmin(req, res, next) {
-    console.log(req.user)
     if (!req.user || !req.user.admin) {
         const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Admin.', 401)
         return next(e);
@@ -52,7 +51,17 @@ function ensureAdmin(req, res, next) {
     }
 }
 
+function ensureCorrectUserOrAdmin(req, res, next) {
+    if (!(req.user && (req.user.admin || req.user.username === req.params.username))) {
+        const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Same User or Admin.', 401)
+        return next(e);
+    }
+    else{
+        return next();
+    }
+}
 
 
-module.exports = {authenticateJWT, ensureLoggedIn, ensureAdmin}
+
+module.exports = {authenticateJWT, ensureLoggedIn, ensureAdmin, ensureCorrectUserOrAdmin}
 

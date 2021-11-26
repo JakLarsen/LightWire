@@ -117,11 +117,6 @@ router.post('/login', async (req,res,next)=>{
  **/
 router.get('/testlogin', ensureLoggedIn, async (req,res,next)=>{
     try{
-        // const token = req.body._token
-        // if (!token){
-        //     throw new ForbiddenError("{_token: 'TOKEN'} not found in req.body")
-        // }
-        // jwt.verify(token, SECRET_KEY)
         return res.status(200).json({msg: `You hit a logged-in endpoint! Welcome, ${req.user.username}`})
     }
     catch(e){
