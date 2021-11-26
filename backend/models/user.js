@@ -106,7 +106,7 @@ class User{
 
 
     /**
-     * Retrieves a list of all users
+     * Retrieves a list of all users (if admin)
      * 
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
@@ -131,7 +131,7 @@ class User{
     }
 
     /**
-     * Retrieves a user by username
+     * Retrieves a user by username (if same user or admin)
      * 
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
@@ -157,7 +157,7 @@ class User{
     }
 
     /**
-     * Does a partial update of user
+     * Partial update of user (if same user or admin)
      * 
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
@@ -186,11 +186,34 @@ class User{
         const result = await db.query(querySql, [...values, username]);
         const user = result.rows[0];
     
-        if (!user) throw new NotFoundError(`No user: ${username}`);
+        if (!user) throw new NotFoundError(`No user: ${username} found.`);
     
+        //we don't want password being displayed on other end
         delete user.password;
         return user;
     }
+
+    /**
+     * Delete a user by username (if same user or admin)
+     * 
+     * Returns [{username, first_name, last_name, email, phone}, ...]
+     **/
+    static async delete(username){
+        let result = await db.query(
+            `DELETE
+             FROM users
+             WHERE username = $1
+             RETURNING username`,
+          [username],
+      );
+      
+      const user = result.rows[0];
+  
+      if (!user) throw new NotFoundError(`No user: ${username}`);
+    }
+
+
+
 }
 
 

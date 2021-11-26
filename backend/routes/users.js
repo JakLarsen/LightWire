@@ -45,7 +45,7 @@ router.get('/', ensureAdmin, async (req,res,next) => {
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
  **/
-router.get('/:username',ensureCorrectUserOrAdmin, async (req,res,next) => {
+router.get('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     try{
         const {username} = req.params
         const user = await User.getByUsername(username)
@@ -68,7 +68,7 @@ router.get('/:username',ensureCorrectUserOrAdmin, async (req,res,next) => {
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
  **/
- router.patch("/:username",ensureCorrectUserOrAdmin, async function (req, res, next) {
+ router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
     try {
         const userObj = {
             ...req.body
@@ -92,9 +92,10 @@ router.get('/:username',ensureCorrectUserOrAdmin, async (req,res,next) => {
  * 
  * Authorization: Admin or Same User
  **/
-router.delete('/:username',ensureCorrectUserOrAdmin, (req,res) => {
+router.delete('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     try{
-        
+        const results = await User.delete(req.params.username)
+        return res.json({deleted: req.params.username})
     }
     catch(e){
         next(e)
