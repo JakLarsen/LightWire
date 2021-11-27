@@ -47,7 +47,14 @@ const Navbar = () => {
     function loggedIn(){
         return (
             <div className="Navbar-logged-in">
-                <h1>Welcome back, {currentUser.username}</h1>
+                <div className="Navbar-left">
+                    <h1>Welcome back, {currentUser.username}</h1>
+                </div>
+                <div className="Navbar-right">
+                    <NavLink exact to="/logout" className="nav-items">
+                        Log Out
+                    </NavLink>
+                </div>
             </div>
         )
     }
