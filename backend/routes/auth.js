@@ -86,6 +86,8 @@ router.post('/register', async (req,res,next) => {
  **/
 router.post('/login', async (req,res,next)=>{
     try{
+        console.debug(`AUTH/LOGIN: `)
+        console.log(req.body)
         const validator = jsonschema.validate(req.body, userAuthSchema);
         if (!validator.valid) {
             const errs = validator.errors.map(e => e.stack);
@@ -93,10 +95,10 @@ router.post('/login', async (req,res,next)=>{
         }
         const { username, password } = req.body;
         const user = await User.authenticate(username, password)
-        const token = createToken(user);
+        const token = await createToken(user);
         return res.status(200).json(
             {
-                logged_in: username, 
+                currentUser: username, 
                 _token: token,
                 admin: user.is_admin
             }

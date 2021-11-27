@@ -27,9 +27,10 @@ const userUpdateSchema = require('../schemas/userUpdate.json')
  * GET '/users'
  * 
  * Authorization: Admin
+ * ensureAdmin,
  * Returns {users: [{username: USERNAME, ...},...]}
  **/
-router.get('/', ensureAdmin, async (req,res,next) => {
+router.get('/', async (req,res,next) => {
     try{
         const users = await User.getAll()
         return res.json({users: users})
