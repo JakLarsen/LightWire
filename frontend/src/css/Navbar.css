@@ -1,0 +1,38 @@
+
+
+
+
+.Navbar-logged-out, .Navbar-logged-in{
+    /* background-color: paleturquoise; */
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100vw;
+    height: 4rem;
+}
+.Navbar-left{
+    /* background-color: pink; */
+    position: relative;
+    display: flex;
+}
+.Navbar-right{
+    /* background-color: purple; */
+    position: relative;
+    display: flex;
+    margin-right: 1rem;
+}
+.nav-items{
+    /* background-color: sandybrown; */
+    position: relative;
+    text-align: center;
+    align-self: center;
+    text-decoration: none;
+    color: #272727;
+    margin: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.nav-items:focus{
+    color:salmon
+}
