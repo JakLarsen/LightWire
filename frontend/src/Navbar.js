@@ -50,7 +50,7 @@ const Navbar = () => {
         return (
             <div className="Navbar-logged-in">
                 <div className="Navbar-left">
-                    <h1>Welcome back, {currentUser.username}</h1>
+                    <div className="Navbar-welcome">Welcome back, {currentUser.username}</div>
                 </div>
                 <div className="Navbar-right">
                     <NavLink exact to="/logout" className="nav-items">

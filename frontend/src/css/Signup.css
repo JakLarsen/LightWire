@@ -30,7 +30,7 @@
 
 .form-label{
     margin-bottom: 0.25rem;
-    color: #777;
+    color: rgb(67, 67, 67);
     font-weight: 400;
 }
 .form-input{
@@ -43,12 +43,12 @@
     font-weight: 500;
 }
 .Signup-btn{
-    background-color: aquamarine;
-    color: #272727;
+    background-color: rgb(69, 112, 101);
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     height: 3rem;
-    font-size: 1.3rem;
+    font-size: 1.0rem;
     font-weight: 600;
     margin: 1rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.2);
