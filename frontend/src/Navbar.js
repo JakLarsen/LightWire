@@ -14,6 +14,8 @@ import React, {useContext} from 'react';
 import UserContext from "./UserContext";
 import {NavLink} from 'react-router-dom';
 
+import ProfileHome from './routes/ProfileHome'
+
 
 
       // COMPONENT

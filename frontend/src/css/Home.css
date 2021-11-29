@@ -2,7 +2,7 @@
 
 
 
-.Login{
+.Home{
     /* background-color: sandybrown; */
     position: relative;
     display: flex;
@@ -11,52 +11,51 @@
     width: 100vw;
     height: 100vh;
 }
-
-.Login-title{
+.Home-title{
     font-size: 1.5rem;
     font-weight: 600;
     margin: 2rem;
 }
-.Login-form{
+.Home-card{
     background-color: #FFF;
     position: relative;
     display: flex;
     flex-flow: column nowrap;
+    align-items: center;
     width: 17rem;
     padding: 2rem 2rem 1rem 2rem;
     border-radius: 5px;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
 }
-
-.form-label{
-    margin-bottom: 0.25rem;
-    color: #777;
-    font-weight: 400;
+.Home-card-title{
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 1rem 1rem 1rem;
 }
-.form-input{
-    border: none;
-    border-bottom: 1px solid rgb(33, 135, 101);
-    width: 17rem;
-    height: 2rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    font-weight: 500;
+.Home-card-btn-wrap{
+    background-color: #FFF;
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
 }
-.Login-btn{
+.Home-card-btn{
     background-color: aquamarine;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #272727;
     border: none;
+    text-decoration: none;
     border-radius: 5px;
     height: 3rem;
+    width: 6rem;
     font-size: 1.3rem;
     font-weight: 600;
     margin: 1rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.2);
 }
-.Login-btn:hover{
+.Home-card-btn:hover{
     cursor: pointer;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-}
-.form-errors{
-    color: red;
 }

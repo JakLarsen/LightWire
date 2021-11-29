@@ -19,6 +19,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 /**
  * Our Frontend to Backend API handler for LightWire
+ *  - Requests an endpoint and method, sending data to endpoint in body
+ *  - Returns whatever results we are returning from our endpoints
  **/
 class LightWireAPI {
 
@@ -43,12 +45,25 @@ class LightWireAPI {
     }
   }
 
+  /**
+   * Request POST to auth/login endpoint
+   *  - Returns {currentUser: USERNAME, _token: TOKEN} as res.data
+   **/
   static async login(data){
     console.debug(`in API HANDLER login(): `, data)
     let res = await this.request(`auth/login`, data, 'post')
     return res.data
   }
 
+  /**
+   * Request POST to auth/register endpoint
+   *  - Returns {registered: USERNAME, _token: TOKEN} as res.data
+   **/
+  static async signup(data){
+    console.debug(`API HANDLER signup(): `, data)
+    let res = await this.request(`auth/register`, data, 'post')
+    return res.data
+  }
   
 
 }

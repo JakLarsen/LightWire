@@ -32,9 +32,13 @@ function App() {
   const [currentUser, setCurrentUser] = useState(INITIAL_USER)
   const [errors, setErrors] = useState(INITIAL_ERRORS)
 
+
+  //LOGIN AND SIGNUP FUNCTIONALITY
+
   const login = async (data) => {
     console.debug('App.js: login()')
-    console.log(`App.js Login data: `, data)
+    
+    // Request API to access post: auth/signup
     let res = await LightWireAPI.login(data)
     const token = res._token
     if (!token){
@@ -44,16 +48,33 @@ function App() {
     else{
       setCurrentUser({username: res.currentUser})
       return ({success: true})
-    } 
-    
+    }  
   }
+
+  const signup = async (data) => {
+    console.debug('App.js: signup()')
+
+    // Request API to access post: auth/signup
+    let res = await LightWireAPI.signup(data)
+    const token = res._token
+    if (!token){
+      setErrors(['Invalid Form Data'])
+      return ({errors: 'Invalid Form Data', success: false})
+    } 
+    else{
+      setCurrentUser({username: res.registered})
+      return ({success: true})
+    }  
+  }
+
+
 
   return (
     <div className="App">
       <BrowserRouter>
         <UserContext.Provider value={{currentUser, setCurrentUser}}>
           <Navbar/>
-          <RouteHandler login={login}/>
+          <RouteHandler login={login} signup={signup}/>
         </UserContext.Provider>
       </BrowserRouter>  
     </div>

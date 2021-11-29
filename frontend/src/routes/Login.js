@@ -12,6 +12,7 @@
 import '../css/Login.css';  
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom'
+import { validateForm } from '../helpers/form';
 
 
 
@@ -37,15 +38,21 @@ const Login = ({login}) => {
 
     const handleSubmit = async (e) =>{
         console.debug('Login: handleSubmit()')
+
         e.preventDefault();
-        console.log(formData)
-        let result = await login(formData)
-        console.log(`Login result: `, result)
-        if (result.success) {
-            navigate("/users");
-        } 
+        const formErrors = await validateForm(formData)
+        if(formErrors != false){
+            setFormErrors([formErrors])
+        }
         else{
-            setFormErrors(result.errors);
+            let result = await login(formData)
+            console.log(`Login result: `, result)
+            if (result.success) {
+                navigate("/profile-home");
+            } 
+            else{
+                setFormErrors(result.errors);
+            }
         }
     }
 

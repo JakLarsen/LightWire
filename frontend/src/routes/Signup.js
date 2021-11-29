@@ -11,6 +11,8 @@
 
 import '../css/Signup.css';  
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { validateForm } from '../helpers/form';
 
 
 
@@ -18,9 +20,11 @@ import React, {useState} from 'react';
 
 
   
-const Signup = () => {
+const Signup = ({signup}) => {
 
-    const INITIALSTATE_FORMDATA = {
+    let navigate = useNavigate();
+
+    const INITIAL_FORMDATA = {
         username: "",
         password: "",
         first_name: "",
@@ -28,18 +32,42 @@ const Signup = () => {
         email: "",
         phone: ""
     }
-    const [formData, setFormData] = useState(INITIALSTATE_FORMDATA)
+    const INITIAL_FORMERRORS = []
+    const [formData, setFormData] = useState(INITIAL_FORMDATA)
+    const [formErrors, setFormErrors] = useState(INITIAL_FORMERRORS)
 
     const handleChange = (e) => {
         const {name, value} = e.target
         setFormData(data => ({ ...data, [name]: value }));
     }
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async (e) =>{
         console.debug('Signup: handleSubmit()')
         e.preventDefault();
+
+        //Gather form data
+        console.log(formData)
+        //Validate - basic
+        const formErrors = await validateForm(formData)
+        if(formErrors != false){
+            setFormErrors([formErrors])
+        }
+        else{
+             //Signup from App.js
+            let result = await signup(formData)
+            //Check for form errors from API
+            console.log(`Signup result: `, result)
+            if (result.success) {
+                navigate("/profile-home");
+            } 
+            else{
+                setFormErrors(result.errors);
+            }
+        }
     }
 
+
+    
     return(
         <div className="Signup">
             <div className="Signup-title">Sign Up</div>
@@ -82,7 +110,7 @@ const Signup = () => {
                     name="phone" value={formData.phone}
                     onChange={handleChange}
                 />
-
+                <div className="form-errors">{formErrors}</div>
                 <button className="Signup-btn" onClick={handleSubmit}>Sign Up</button>
 
             </form>
