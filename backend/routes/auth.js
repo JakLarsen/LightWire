@@ -82,7 +82,7 @@ router.post('/register', async (req,res,next) => {
  * Requires {username: USERNAME, password: PASSWORD}
  * 
  * Authorization: User +
- * Returns {logged_in: USERNAME, _token: TOKEN}
+ * Returns {currentUser: USERNAME, _token: TOKEN}
  **/
 router.post('/login', async (req,res,next)=>{
     try{
