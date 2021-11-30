@@ -20,19 +20,27 @@ const { ExpressError } = require('../expressError');
 
 
 function authenticateJWT(req,res,next){
+    console.log('Running AUTHENTICATEJWT')
+    console.log(req.headers.authorization)
     try{
-        let payload = jwt.verify(req.body._token, SECRET_KEY)
-        req.user = payload
-        console.log('YOU HAVE A VALID TOKEN')
+        const authHeader = req.headers && req.headers.authorization;
+        if (authHeader) {
+            const token = authHeader.replace(/^[Bb]earer /, "").trim();
+            console.log(token)
+            res.locals.user = jwt.verify(token, SECRET_KEY);
+            console.log(res.locals.user)
+        }
         return next()
     }
     catch(e){
+        console.log('NEXT')
         next()
     }
 }
 
 function ensureLoggedIn(req,res,next){
-    if (!req.user){
+    console.log('RUNNING ENSURELOGGEDIN res.locals.user: ', res.locals.user)
+    if (!res.locals.user){
         const e = new ExpressError('Unauthorized attempt to reach endpoint: Not Logged-in', 401)
         return next(e);
     }
@@ -42,7 +50,7 @@ function ensureLoggedIn(req,res,next){
 }
 
 function ensureAdmin(req, res, next) {
-    if (!req.user || !req.user.admin) {
+    if (!res.locals.user || !res.locals.user.admin) {
         const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Admin.', 401)
         return next(e);
     }
@@ -52,7 +60,8 @@ function ensureAdmin(req, res, next) {
 }
 
 function ensureCorrectUserOrAdmin(req, res, next) {
-    if (!(req.user && (req.user.admin || req.user.username === req.params.username))) {
+    console.debug('Checking ENSURECORRECTUSERORADMIN req.body: ', req.body)
+    if (!(res.locals.user && (res.locals.user.admin || res.locals.user.username === req.params.username))) {
         const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Same User or Admin.', 401)
         return next(e);
     }

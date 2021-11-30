@@ -21,9 +21,11 @@ CREATE TABLE accounts(
     id SERIAL PRIMARY KEY,
     user_id INTEGER
         REFERENCES users ON DELETE CASCADE,
+    username VARCHAR(25) NOT NULL,
     balance FLOAT NOT NULL DEFAULT 0,
     open_date DATE,
-    account_type TEXT NOT NULL
+    account_type TEXT NOT NULL,
+    interest FLOAT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE transactions(

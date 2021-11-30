@@ -35,32 +35,50 @@ VALUES (
 
 INSERT INTO accounts(
     user_id,
+    username,
     balance,
     open_date,
-    account_type)
+    account_type,
+    interest)
 VALUES (
     1,
+    'testuser',
     5000,
     '2021-11-20',
-    'savings'
+    'savings',
+    2.0
 ),
 (
     1,
+    'testuser',
     10000,
     '2021-11-20',
-    'checking'  
+    'checking',
+    1.0  
+),
+(
+    1,
+    'testuser',
+    4500,
+    '2021-11-20',
+    'credit card',
+    2.0  
 ),
 (
     2,
+    'testadmin',
     15000,
     '2021-11-20',
-    'savings'
+    'savings',
+    2.0
 ),
 (
     2,
+    'testadmin',
     20000,
     '2021-11-20',
-    'checking'  
+    'checking',
+    1.0  
 );
 
 INSERT INTO transactions

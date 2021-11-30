@@ -4,8 +4,7 @@
 
 TIMELINE
 
-11/26/21
-- Start React!!!
+
 
 11/27/21
 - React register form

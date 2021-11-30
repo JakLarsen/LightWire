@@ -212,6 +212,27 @@ class User{
       if (!user) throw new NotFoundError(`No user: ${username}`);
     }
 
+    static async getAccounts(username){
+        try{
+            const results = await db.query(
+                `SELECT 
+                    balance,
+                    username,
+                    open_date,
+                    account_type,
+                    interest
+                FROM accounts
+                WHERE username = $1`,
+                [username]
+            );
+            const accounts = results.rows
+            return accounts
+        }
+        catch(e){
+            throw new ExpressError('getAccounts Error')
+        }
+    }
+
 
 
 }

@@ -10,7 +10,10 @@
 
 
 import '../css/ProfileHome.css';  
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import UserContext from '../UserContext';
+import LightWireAPI from '../LightWireAPI';
+import Account from './Account';
 
 
 
@@ -19,7 +22,34 @@ import React from 'react';
 
 
 
-const Home = () => {
+const ProfileHome = () => {
+
+    const { currentUser, setCurrentUser } = useContext(UserContext);
+
+    const INITIAL_ACCOUNTS = []
+    const [accounts, setAccounts] = useState(INITIAL_ACCOUNTS)
+
+    useEffect(async function loadAccountInfo(){
+        
+        async function getUserAccounts(){
+            console.debug("App useEffect loadAccountInfo");
+            if(currentUser){
+                try {
+                    console.log('There is a current user:', currentUser)
+                    let results = await LightWireAPI.getAccounts({currentUser})
+                    console.log('useEFFECT loadAccountInfo() results:', results)
+                    setAccounts(results.accounts)
+                } 
+                catch (e) {
+                    console.error('getUserAccounts Error: ', e.stack)
+                }
+            }
+            else{
+                console.log('No current user:', currentUser)
+            }
+        }
+        getUserAccounts()
+    },[])
 
 
     return (
@@ -74,28 +104,9 @@ const Home = () => {
                 <div className="ProfileHome-accounts">
                     <div className="ProfileHome-accounts-title">My Accounts</div>
                     <div className="ProfileHome-accounts-card">
-                        <div className="account">
-                            <div className="account-title">SAVINGS ACC: x9142</div>
-                            <div className="account-balance"><span className="strong">BALANCE:</span> $54,430.00</div>
-                            <div className="account-apr"><span className="strong">INTEREST:</span> 2.00%</div>
-                            <div className="account-interest"><span className="strong">(YR) INTEREST EST:</span> ${54430 *0.02}</div>
-                            <div className="account-transactions-btn">Transactions</div>
-                        </div>
-                        <div className="account">
-                            <div className="account-title">CHECKING ACC: x4133</div>
-                            <div className="account-balance"><span className="strong">BALANCE:</span> $14,430.00</div>
-                            <div className="account-apr"><span className="strong">INTEREST:</span> 1.00%</div>
-                            <div className="account-interest"><span className="strong">(YR) INTEREST EST:</span> ${14430 *0.01}</div>
-                            <div className="account-transactions-btn">Transactions</div>
-                        </div>
-                        <div className="account">
-                            <div className="account-title">CREDIT CARD: x2770</div>
-                            <div className="account-balance"><span className="strong">USAGE:</span> $4,112.00 / $20,000</div>
-                            <div className="account-apr"><span className="strong">APR:</span> 24.00%</div>
-                            <div className="account-interest"><span className="strong">(MO) INTEREST EST:</span> -${4112 *0.02}</div>
-                            <div className="account-transactions-btn">Transactions</div>
-                        </div>
-                      
+                        {accounts.map(account => (
+                            <Account/>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -105,4 +116,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default ProfileHome

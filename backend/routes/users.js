@@ -11,7 +11,7 @@
 
 const express = require('express');
 const router = new express.Router();
-const { ensureCorrectUserOrAdmin, ensureAdmin } = require('../middleware/auth');
+const { ensureCorrectUserOrAdmin, ensureAdmin, ensureLoggedIn, authenticateJWT } = require('../middleware/auth');
 const {User} = require('../models/user')
 const {BadRequestError} = require('../expressError')
 const jsonschema = require('jsonschema')
@@ -45,6 +45,7 @@ router.get('/', async (req,res,next) => {
  * 
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
+ * ensureCorrectUserOrAdmin,
  **/
 router.get('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     try{
@@ -102,5 +103,16 @@ router.delete('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
         next(e)
     }
 })
+
+router.get('/:username/accounts', ensureCorrectUserOrAdmin, async(req,res,next) => {
+    try{
+        const results = await User.getAccounts(req.params.username)
+        return res.json({accounts: results})
+    }
+    catch(e){
+        next(e)
+    }
+})
+
 
 module.exports = router;
