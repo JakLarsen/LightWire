@@ -106,6 +106,14 @@ class LightWireAPI {
     return res.data
   }
 
+  static async deleteAccount(data){
+    console.debug(`LightWireAPI deleteAccount()`, data)
+    const {username, id} = data
+    console.log(username, id)
+    let res = await this.request(`users/${data.username}/account/${data.id}`, data, "DELETE")
+    return res.data
+  }
+
 
   
 

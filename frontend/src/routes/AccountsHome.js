@@ -24,14 +24,11 @@ import Transaction from './Transaction';
 
 
 
-const AccountsHome = () => {
+const AccountsHome = ({deleteAccount}) => {
 
     let navigate = useNavigate()
 
-    const { currentUser, setCurrentUser } = useContext(UserContext);
-
-    const INITIAL_ACCOUNTS = []
-    const [accounts, setAccounts] = useState(INITIAL_ACCOUNTS)
+    const { currentUser, setCurrentUser, accounts, setAccounts } = useContext(UserContext);
 
     useEffect(async function loadAccountInfo(){
         
@@ -91,6 +88,7 @@ const AccountsHome = () => {
                                 balance={account.balance} 
                                 type={account.account_type} 
                                 interest={account.interest} 
+                                deleteAccount={deleteAccount}
                             />
                         ))}
                         <div className="add-account-btn" onClick={handleClick}>Add Account</div>

@@ -30,7 +30,7 @@ import AddAccount from './routes/AddAccount'
 
 
   
-const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount}) => {
+const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount, deleteAccount}) => {
 
     let navigate = useNavigate()
     const goBack = () => {
@@ -50,7 +50,7 @@ const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount}) =>
                     exact path="/accounts-home" 
                     element={
                         <PrivateRoute>
-                            <AccountsHome/>
+                            <AccountsHome deleteAccount={deleteAccount}/>
                         </PrivateRoute>
                     }
                 />

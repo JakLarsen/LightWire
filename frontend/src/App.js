@@ -31,11 +31,13 @@ function App() {
   const INITIAL_USER_INFO = undefined
   const INITIAL_TOKEN = undefined
   const INITIAL_ERRORS = []
+  const INITIAL_ACCOUNTS = []
 
   const [currentUser, setCurrentUser] = useState(INITIAL_USER)
   const [token, setToken] = useState(INITIAL_TOKEN)
   const [currentUserInfo, setCurrentUserInfo] = useState(INITIAL_USER_INFO)
   const [errors, setErrors] = useState(INITIAL_ERRORS)
+  const [accounts, setAccounts] = useState(INITIAL_ACCOUNTS)
 
 
 
@@ -155,7 +157,6 @@ function App() {
     } 
     else{
       let res = await LightWireAPI.deleteUser(data)
-      // console.log('UPDATE USER res: ', res)
       return ({success: true})
     }
 
@@ -171,7 +172,7 @@ function App() {
     const token = LightWireAPI.token
     if(!token){
       setErrors(['Missing Token'])
-      return({errors: 'MIssing Token', success: false})
+      return({errors: 'Missing Token', success: false})
     }
     else{
       let res = await LightWireAPI.createAccount(data)
@@ -179,6 +180,29 @@ function App() {
     }
 
   }
+
+  //DELETE ACCOUNT
+
+  const deleteAccount =  async(data) => {
+    console.debug('App.js: deleteAccount()', data)
+
+    const token = LightWireAPI.token
+    if(!token){
+      setErrors(['Missing Token'])
+      return({errors: 'Missing Token', success: false})
+    }
+    else{
+      let res = await LightWireAPI.deleteAccount(data)
+      let newAccounts = []
+      accounts.forEach(account => {
+        if (account.id != data.id){
+          newAccounts.push(account)
+        }
+      })
+      setAccounts(newAccounts)
+      return ({success: true})
+    }
+}
 
 
 
@@ -192,7 +216,8 @@ function App() {
         <UserContext.Provider value={
           {
             currentUser, setCurrentUser, 
-            currentUserInfo, setCurrentUserInfo
+            currentUserInfo, setCurrentUserInfo,
+            accounts, setAccounts
           }}>
           <Navbar/>
           <RouteHandler 
@@ -201,6 +226,7 @@ function App() {
             updateUser={updateUser}
             deleteUser={deleteUser}
             createAccount={createAccount}
+            deleteAccount={deleteAccount}
           />
         </UserContext.Provider>
       </BrowserRouter>  

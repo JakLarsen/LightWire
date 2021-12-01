@@ -143,5 +143,16 @@ router.post('/:username/account', async (req,res,next) => {
     }
 });
 
+router.delete('/:username/account/:id', ensureCorrectUserOrAdmin, async(req,res,next) => {
+    try{
+        const {id} = req.params
+        const results = await User.removeAccount(id)
+        return res.json({deleted: id})
+    }
+    catch(e){
+        next(e)
+    }
+})
+
 
 module.exports = router;

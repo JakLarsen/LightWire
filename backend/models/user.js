@@ -273,6 +273,22 @@ class User{
         }
     }
 
+    static async removeAccount(id){
+        console.log('In removeAccount()')
+
+        try{
+            let results = await db.query(
+                `DELETE 
+                FROM accounts
+                WHERE id = $1`,
+                [id]
+            )
+        }
+        catch(e){
+            throw new ExpressError('removeAccount Error')
+        }
+    }
+
 
 }
 
