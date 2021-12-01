@@ -26,6 +26,14 @@ const validateForm = async (formData) => {
     return formErrors
 }
 
+const getInterestRate = (account_type) => {
+    let interestRate = 0
+    if (account_type=='savings') interestRate = 0.02
+    else if (account_type=='checking') interestRate = 0.01
+    else if (account_type=='credit') interestRate = 0.02
+    return interestRate
+}
 
 
-module.exports = {validateForm}
+
+module.exports = {validateForm, getInterestRate}

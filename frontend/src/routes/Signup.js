@@ -58,7 +58,7 @@ const Signup = ({signup}) => {
             //Check for form errors from API
             console.log(`Signup result: `, result)
             if (result.success) {
-                navigate("/profile-home");
+                navigate("/accounts-home");
             } 
             else{
                 setFormErrors(result.errors);

@@ -1,8 +1,4 @@
-
-
-
-
-.Login{
+.UserProfile{
     /* background-color: sandybrown; */
     position: relative;
     display: flex;
@@ -12,12 +8,12 @@
     height: 100vh;
 }
 
-.Login-title{
+.UserProfile-form-title{
     font-size: 1.5rem;
     font-weight: 600;
     margin: 2rem;
 }
-.Login-form{
+.UserProfile-form{
     background-color: #FFF;
     position: relative;
     display: flex;
@@ -31,7 +27,7 @@
 .form-label{
     margin-bottom: 0.25rem;
     color: rgb(67, 67, 67);
-    font-weight: 600;
+    font-weight: 400;
 }
 .form-input{
     border: none;
@@ -42,9 +38,9 @@
     font-size: 1rem;
     font-weight: 500;
 }
-.Login-btn{
+.update-btn, .delete-btn{
     background-color: rgb(69, 112, 101);
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     border: none;
     border-radius: 3px;
     height: 3rem;
@@ -53,10 +49,14 @@
     margin: 1rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.2);
 }
-.Login-btn:hover{
+.update-btn:hover, .delete-btn:hover{
     cursor: pointer;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
+.delete-btn{
+    background-color: rgb(148, 18, 18);
+}
+
 .form-errors{
     color: red;
 }

@@ -10,9 +10,10 @@
 
 
 import '../css/Home.css';  
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink} from 'react-router-dom'
-
+import UserContext from '../UserContext';
+import LightWireAPI from '../LightWireAPI';
 
 
             // COMPONENT
@@ -21,6 +22,10 @@ import {NavLink} from 'react-router-dom'
 
 const Home = () => {
 
+    const {currentUser, currentUserInfo} = useContext(UserContext)
+
+    console.log('LOGOUT CHECK currentUser, currentUserInfo, LightWireAPI.token:', 
+        currentUser, currentUserInfo, LightWireAPI.token)
 
     return (
         <div className="Home">

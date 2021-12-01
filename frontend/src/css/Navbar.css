@@ -3,8 +3,8 @@
 
 
 .Navbar-logged-out, .Navbar-logged-in{
-    background-color: rgb(185, 245, 229);
-    color: #272727;
+    background-color: rgb(69, 112, 101);
+    color: #FFF;
     position: relative;
     display: flex;
     flex-flow: row nowrap;
@@ -17,6 +17,8 @@
     /* background-color: pink; */
     position: relative;
     display: flex;
+    align-items: center;
+    /* padding-left: 1rem; */
 }
 .Navbar-right{
     /* background-color: purple; */
@@ -26,6 +28,7 @@
 }
 .nav-items{
     /* background-color: sandybrown; */
+    color: #FFF;
     position: relative;
     text-align: center;
     align-self: center;
@@ -35,13 +38,13 @@
     font-weight: 500;
 }
 .nav-items:visited{
-    color: black;
+    color: #FFF;
 }
 .nav-items:focus{
-    color: coral;
+    color: rgb(164, 250, 193);
 }
 .Navbar-welcome{
-    color: #272727;
+    color: #FFF;
     font-size: 1.1rem;
     font-weight: 500;
     margin-left: 1rem;

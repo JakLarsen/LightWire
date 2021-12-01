@@ -26,7 +26,7 @@ function authenticateJWT(req,res,next){
         const authHeader = req.headers && req.headers.authorization;
         if (authHeader) {
             const token = authHeader.replace(/^[Bb]earer /, "").trim();
-            console.log(token)
+            console.log('TOKEN', token)
             res.locals.user = jwt.verify(token, SECRET_KEY);
             console.log(res.locals.user)
         }

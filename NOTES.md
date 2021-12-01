@@ -6,28 +6,12 @@ TIMELINE
 
 
 
-11/27/21
-- React register form
-- React login form
-- React state-managed persistant login
-- React private routing by same user or admin
-- React user update profile form
 
-11/28/21
-- Account.create()
-- Account.getByUsername()
+12/1/21
 - Account.update()
 - Account.delete()
 
-11/29/21
-- Account.getAllRecievedTransactions()
-- Account.getAllSentTransactions()
-- React Account Display
-- Account.getStatement()
-    - These are transactions by billing_period
-- React Statement Dispaly
-
-11/30/21
+12/2/21
 - Account.withdraw()
 - Account.deposit()
 - Account.transferFunds()
@@ -35,29 +19,42 @@ TIMELINE
 - React Deposit form
 - React Transfer Funds form
 
-12/1/21
-- CSS Responsiveness
-- CSS Accessibility
+12/3/21
+- Account.getAllRecievedTransactions()
+- Account.getAllSentTransactions()
+- React Account Display
+- Account.getStatement()
+    - These are transactions by billing_period
+- React Statement Dispaly
 
-12/2/21
+
+12/4/21
+- CSS Responsiveness
+- HTML Accessibility
+
+12/5/21
 - CSS Polishing
 - README and documentation
 - Begin testing more thoroughly
 
-12/3/21
+12/6/21
+- Documentation
+- Refactoring
 - Test everything thoroughly to show competency with testing.
 - DONE
 
-12/4/21 - 12/7/21
-- 47
 
 
 
 - DONE ---
 
+12/1 - 
+- DONE --- User.createAccount() Backend
+- DONE --- User.createAccount() Frontend + connectivity
+- DONE --- User.getAllAccounts() Backend
+- DONE --- User.getAllAccounts() Frontend + connectivity
 
-
-11/26/21
+11/26/21 - 11/30
 - DONE --- Iniital setup
 - DONE --- Api and schema design
 - DONE --- Database setup and connection
@@ -69,10 +66,16 @@ TIMELINE
 - DONE --- Setup register/login routes
 - DONE --- Setup initial tests
 - DONE --- User.getUserByUsername()
+- DONE --- AUTH OVERHAUL - jwt header auth.
 - DONE --- User.update()
 - DONE --- User.delete()
+- DONE ---React register form
+- DONE ---React login form
+- DONE ---React state-managed persistant login
+- DONE ---React private routing by same user or admin
+- DONE ---React user update profile form
 
-11/27/21
+
 
 
 

@@ -27,10 +27,9 @@ const userUpdateSchema = require('../schemas/userUpdate.json')
  * GET '/users'
  * 
  * Authorization: Admin
- * ensureAdmin,
  * Returns {users: [{username: USERNAME, ...},...]}
  **/
-router.get('/', async (req,res,next) => {
+router.get('/', ensureAdmin, async (req,res,next) => {
     try{
         const users = await User.getAll()
         return res.json({users: users})
@@ -45,7 +44,6 @@ router.get('/', async (req,res,next) => {
  * 
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
- * ensureCorrectUserOrAdmin,
  **/
 router.get('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     try{
@@ -93,6 +91,7 @@ router.get('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
  * DELETE '/users/:username
  * 
  * Authorization: Admin or Same User
+ * Returns {deleted: USERNAME}
  **/
 router.delete('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     try{
@@ -104,15 +103,45 @@ router.delete('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
     }
 })
 
+/**
+ * GET '/users/:username/accounts
+ * 
+ * Retrieve the banking accounts for a given username
+ * 
+ * Authorization: Admin or Same User
+ * Returns: {accounts: [...]}
+ **/
 router.get('/:username/accounts', ensureCorrectUserOrAdmin, async(req,res,next) => {
+    console.log('/username/accounts')
     try{
+        console.log('/username/accounts')
         const results = await User.getAccounts(req.params.username)
         return res.json({accounts: results})
     }
     catch(e){
         next(e)
     }
-})
+});
+
+router.post('/:username/account', async (req,res,next) => {
+    try{
+        const {username} = req.params
+        console.log('/users/:username/account req.body: ', req.body)
+
+        let accountObj = {
+            username: req.body.username,
+            balance: req.body.balance,
+            open_date: req.body.open_date,
+            account_type: req.body.account_type,
+            interest: req.body.interest
+        }
+        const results = await User.createAccount(accountObj)
+        return res.status(201).json({account: results})
+    }   
+    catch(e){
+        next(e)
+    }
+});
 
 
 module.exports = router;

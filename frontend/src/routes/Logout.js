@@ -1,14 +1,25 @@
 import React, {useContext} from "react";
-import UserContext from '../UserContext';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import UserContext from "../UserContext";
+import LightWireAPI from "../LightWireAPI";
+
 
 
 const Logout = () => {
 
-    const { currentUser, setCurrentUser } = useContext(UserContext);
-    setCurrentUser(undefined)
-    // let navigate = useNavigate('/');
+    let navigate = useNavigate()
 
+    const {setCurrentUser, setCurrentUserInfo} = useContext(UserContext)
+
+     //LOGOUT
+
+     const logout = () => {
+        setCurrentUser(undefined)
+        setCurrentUserInfo(undefined)
+        LightWireAPI.token = "";
+        navigate('/')
+    }
+    logout()
 
     return (
         <div className="Logout">

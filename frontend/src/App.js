@@ -12,7 +12,7 @@
 import './css/App.css';
 
 import React, {useState, useEffect} from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
 import UserContext from './UserContext';
 
 import LightWireAPI from './LightWireAPI';
@@ -37,7 +37,9 @@ function App() {
   const [currentUserInfo, setCurrentUserInfo] = useState(INITIAL_USER_INFO)
   const [errors, setErrors] = useState(INITIAL_ERRORS)
 
-  //LOGIN AND SIGNUP FUNCTIONALITY
+
+
+  //LOGIN 
 
   const login = async (data) => {
     console.debug('App.js: login(), data: ', data)
@@ -65,13 +67,19 @@ function App() {
         username: res.currentUser,
         _token: token
       })
-      console.log('res2 data from getUserData attempt: ', res2)
+      const ourUserInfo = res2.user
+      await setCurrentUserInfo(ourUserInfo)
+      console.log('RESULTS FROM RES2: ', res2, currentUserInfo)
       return ({success: true})
     }  
   }
 
+
+
+  //SIGN UP
+
   const signup = async (data) => {
-    // console.debug('App.js: signup()')
+    console.debug('App.js: signup()')
 
     // Request API to access post: auth/register
     let res = await LightWireAPI.signup(data)
@@ -81,10 +89,100 @@ function App() {
       return ({errors: 'Invalid Form Data', success: false})
     } 
     else{
-      setCurrentUser({username: res.registered, _token: token})
+      setToken(token)
+      LightWireAPI.token = token
+      setCurrentUser(
+        {
+          username: res.registered,
+          _token: token
+        }
+      )
+      let res2 = await LightWireAPI.getUserData({
+        username: res.registered,
+        _token: token
+      })
+      console.log(token)
+      const ourUserInfo = res2.user
+      await setCurrentUserInfo(ourUserInfo)
+      console.log('RESULTS FROM RES2: ', res2, currentUserInfo)
       return ({success: true})
     }  
   }
+
+
+  
+  //UPDATE USER
+
+  const updateUser = async (data) => {
+    console.debug('App.js: updateUser()')
+
+    const username = currentUserInfo.username
+    const token = LightWireAPI.token
+    if (!token){
+      setErrors(['Missing Token'])
+      return ({errors: 'Missing Token', success: false})
+    } 
+    else{
+      let res = await LightWireAPI.updateUser(data)
+      console.log('UPDATE USER res: ', res)
+      await setCurrentUserInfo(
+        {
+          username: currentUserInfo.username,
+          first_name: res.user.first_name,
+          last_name: res.user.last_name,
+          email: res.user.email,
+          phone: res.user.phone
+        }
+      )
+      console.log('RESULTS FROM RES2: ', res, currentUserInfo)
+      return ({success: true})
+    }
+  }
+
+
+
+  //DELETE USER
+
+  const deleteUser = async () => {
+    console.debug('App.js: deleteUser()')
+
+    const username = currentUserInfo.username
+    let data = {username: username}
+    const token = LightWireAPI.token
+    if (!token){
+      setErrors(['Missing Token'])
+      return ({errors: 'Missing Token', success: false})
+    } 
+    else{
+      let res = await LightWireAPI.deleteUser(data)
+      // console.log('UPDATE USER res: ', res)
+      return ({success: true})
+    }
+
+  }
+
+
+
+  // CREATE ACCOUNT
+
+  const createAccount = async (data) => {
+    console.debug('App.js: createAccount()', data)
+
+    const token = LightWireAPI.token
+    if(!token){
+      setErrors(['Missing Token'])
+      return({errors: 'MIssing Token', success: false})
+    }
+    else{
+      let res = await LightWireAPI.createAccount(data)
+      return ({success: true})
+    }
+
+  }
+
+
+
+  // MAIN APP
 
 
 
@@ -97,7 +195,13 @@ function App() {
             currentUserInfo, setCurrentUserInfo
           }}>
           <Navbar/>
-          <RouteHandler login={login} signup={signup}/>
+          <RouteHandler 
+            login={login} 
+            signup={signup} 
+            updateUser={updateUser}
+            deleteUser={deleteUser}
+            createAccount={createAccount}
+          />
         </UserContext.Provider>
       </BrowserRouter>  
     </div>

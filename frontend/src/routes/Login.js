@@ -48,7 +48,7 @@ const Login = ({login}) => {
             let result = await login(formData)
             console.log(`Login result: `, result)
             if (result.success) {
-                navigate("/profile-home");
+                navigate("/accounts-home");
             } 
             else{
                 setFormErrors(result.errors);

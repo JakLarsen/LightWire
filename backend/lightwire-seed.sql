@@ -43,26 +43,26 @@ INSERT INTO accounts(
 VALUES (
     1,
     'testuser',
-    5000,
+    5440.17,
     '2021-11-20',
     'savings',
-    2.0
+    0.01
 ),
 (
     1,
     'testuser',
-    10000,
+    29344.94,
     '2021-11-20',
     'checking',
-    1.0  
+    0.01 
 ),
 (
     1,
     'testuser',
-    4500,
+    5218.98,
     '2021-11-20',
-    'credit card',
-    2.0  
+    'credit',
+    0.02  
 ),
 (
     2,
@@ -70,7 +70,7 @@ VALUES (
     15000,
     '2021-11-20',
     'savings',
-    2.0
+    0.02
 ),
 (
     2,
@@ -78,7 +78,7 @@ VALUES (
     20000,
     '2021-11-20',
     'checking',
-    1.0  
+    0.01  
 );
 
 INSERT INTO transactions

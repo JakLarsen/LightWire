@@ -14,7 +14,6 @@ import React, {useContext} from 'react';
 import UserContext from "./UserContext";
 import {NavLink} from 'react-router-dom';
 
-import ProfileHome from './routes/ProfileHome'
 
 
 
@@ -53,10 +52,16 @@ const Navbar = () => {
         return (
             <div className="Navbar-logged-in">
                 <div className="Navbar-left">
+                    <NavLink exact to="/accounts-home" className="Navbar-brand nav-items">
+                        LightWire
+                    </NavLink>
                     <div className="Navbar-welcome">Welcome back, {currentUser.username}</div>
                 </div>
                 <div className="Navbar-right">
-                    <NavLink exact to={`profiles/${currentUser.username}`} className="nav-items">
+                    <NavLink exact to={`accounts-home`} className="nav-items">
+                        Account
+                    </NavLink>
+                    <NavLink exact to={`users/${currentUser.username}`} className="nav-items">
                         Profile
                     </NavLink>
                     <NavLink exact to="/logout" className="nav-items">

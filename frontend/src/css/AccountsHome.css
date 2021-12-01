@@ -48,7 +48,6 @@
      justify-content: center;
      align-items: center;
      width: 50rem;
-     height: 30rem;
      margin-bottom: 2rem;
      margin-right: 2rem;
 }
@@ -104,40 +103,15 @@
 .table-desc{
     width: 40%;
 }
-.transaction-amount{
-    /* background-color: red; */
-    position: relative;
-    left: 1.5rem;
-}
-.table-amount{
-    width: 30%;
-}
-.transaction{
-    background-color: #FFF;
-    /* background-color: burlywood; */
-    padding: 1rem;
-    color: rgb(41, 41, 41);
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-top: 0.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    border-radius: 3px;
-    /* border-bottom: 1px solid grey; */
-    box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
-}
-.transaction:last-child{
-    margin-bottom: 3rem;
-}
+
+
+
 
 .ProfileHome-accounts-card{
     background-color: rgb(69, 112, 101);
     position: relative;
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     justify-content: space-between;
     align-items: center;
     width: 90%;
@@ -146,4 +120,22 @@
     border-radius: 3px;
     padding: 2rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
+}
+.add-account-btn{
+    background-color: #FFF;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 2.5rem;
+    width: 7rem;
+    border-radius: 3px;
+    margin-top: 1rem;
+    box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
+}
+.add-account-btn:hover{
+    cursor: pointer;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }

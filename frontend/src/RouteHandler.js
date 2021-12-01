@@ -9,17 +9,20 @@
 
 
 
-import React from 'react'
+import React, {useContext} from 'react'
 import {Route, Routes, useNavigate} from 'react-router-dom'
+import LightWireAPI from './LightWireAPI'
+import UserContext from './UserContext'
 
 import Home from './routes/Home'
-import ProfileHome from './routes/ProfileHome'
+import AccountsHome from './routes/AccountsHome'
 import Signup from "./routes/Signup";
 import Login from './routes/Login';
 import Logout from './routes/Logout';
 import PrivateRoute from './PrivateRoute'
 import UserProfile from './routes/UserProfile';
 import NotFound from './routes/NotFound'
+import AddAccount from './routes/AddAccount'
 
 
 
@@ -27,8 +30,7 @@ import NotFound from './routes/NotFound'
 
 
   
-const RouteHandler = ({login, signup}) => {
-
+const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount}) => {
 
     let navigate = useNavigate()
     const goBack = () => {
@@ -45,18 +47,26 @@ const RouteHandler = ({login, signup}) => {
                 <Route exact path="/logout" element={<Logout/>}/>
 
                 <Route 
-                    exact path="/profile-home" 
+                    exact path="/accounts-home" 
                     element={
                         <PrivateRoute>
-                            <ProfileHome/>
+                            <AccountsHome/>
                         </PrivateRoute>
                     }
                 />
                 <Route 
-                    exact path="/profiles/:username"
+                    exact path="/users/:username"
                     element={
                         <PrivateRoute>
-                            <UserProfile/>
+                            <UserProfile updateUser={updateUser} deleteUser={deleteUser}/>
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    exact path="/users/:username/create-account"
+                    element={
+                        <PrivateRoute>
+                            <AddAccount createAccount={createAccount}/>
                         </PrivateRoute>
                     }
                 />

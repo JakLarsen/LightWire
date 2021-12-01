@@ -216,6 +216,7 @@ class User{
         try{
             const results = await db.query(
                 `SELECT 
+                    id,
                     balance,
                     username,
                     open_date,
@@ -233,6 +234,44 @@ class User{
         }
     }
 
+    static async createAccount(accountObj){
+        console.log('In createAccount()')
+        const {username, balance, date, account_type, interest} = accountObj
+        try{
+            const userResults = await db.query(
+                `SELECT 
+                    id,
+                    username
+                FROM users
+                WHERE username = $1`,
+            [username]
+            );
+
+            const userID = userResults.rows[0].id
+
+            const results = await db.query(
+                `INSERT INTO accounts
+                (
+                    user_id,
+                    username, 
+                    balance, 
+                    open_date, 
+                    account_type, 
+                    interest
+                )
+                VALUES 
+                    ($1, $2, $3, $4, $5, $6)
+                RETURNING id, user_id, username, balance, open_date, account_type, interest
+                `,
+                [userID, username, balance, date, account_type, interest]
+            )
+            return results.rows
+        }
+
+        catch(e){
+            throw new ExpressError('createAccount Error')
+        }
+    }
 
 
 }
