@@ -2,7 +2,7 @@
 
 
 
-.account{
+.account-card{
     background-color: #FFF;
     position: relative;
     display: flex;
@@ -10,17 +10,17 @@
     height: 15rem;
     width: 30%;
     border-radius: 3px;
-    margin: 1rem 0rem;
+    margin: 0.75rem 0.75rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
 }
-.account-title{
+.account-card-title{
     color: #666;
     align-self: center;
     padding: 1rem;
     font-size: 1.1rem;
     font-weight: 500;
 }
-.account-balance, .account-apr, .account-interest{
+.account-card-balance, .account-card-apr, .account-card-interest{
     color: #777;
     font-weight: 500;
     margin-top: 0.5rem;
@@ -32,7 +32,7 @@
     font-weight: 600;
 }
 
-.account-btn-wrap{
+.account-card-btn-wrap{
     /* background-color: aquamarine; */
     position: relative;
     display: flex;
@@ -41,7 +41,7 @@
 
     height: 7rem;
 }
-.account-statement-btn {
+.account-card-statement-btn {
     background-color: rgb(69, 112, 101);
     color: #FFF;
     font-size: 0.9rem;
@@ -57,11 +57,11 @@
     box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
     text-decoration: none;
 }
-.account-statement-btn:hover, .account-delete-btn:hover{
+.account-card-statement-btn:hover, .account-card-delete-btn:hover{
     cursor: pointer;
     box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
 }
-.account-delete-btn{
+.account-card-delete-btn{
     background-color: red;
     position: relative;
     display: flex;

@@ -1,14 +1,15 @@
-   /* ACCOUNTCARD */
+   /* ACCOUNT */
 
 
 
-   .account{
+.account{
     background-color: #FFF;
     position: relative;
     display: flex;
     flex-flow: column nowrap;
-    height: 15rem;
-    width: 30%;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
     border-radius: 3px;
     margin: 1rem 0rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
@@ -32,32 +33,7 @@
     font-weight: 600;
 }
 
-.account-btn-wrap{
-    /* background-color: aquamarine; */
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 7rem;
-}
-.account-statement-btn {
-    background-color: rgb(69, 112, 101);
-    color: #FFF;
-    font-size: 0.9rem;
-    font-weight: 500;
-    position: relative;
-    display: flex;
-    align-self: center;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-    width: 6rem;
-    height: 2.5rem;
-    box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
-    text-decoration: none;
-}
-.account-statement-btn:hover, .account-delete-btn:hover{
+.account-delete-btn:hover{
     cursor: pointer;
     box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
 }
@@ -68,9 +44,64 @@
     justify-content: center;
     align-items: center;
     color: #FFF;
-    width: 2rem;
+    padding: 0.5rem;
     height: 2rem;
     margin-left: 0.5rem;
     border-radius: 3px;
     box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
+}
+
+.account-transactions-wrap{
+    /* background-color: aquamarine; */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 30rem;
+    width: 80%;
+    min-width: 30rem;
+    max-width: 60rem;
+    margin: 1.5rem;
+}
+
+.account-transactions-card{
+    background-color: rgb(69, 112, 101);
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 90%;
+    height: 90%;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    overflow: scroll;
+    padding: 0.5rem;
+    box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
+}
+
+.account-transactions-card-table-titles{
+    /* background-color: cadetblue; */
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    color: #FFF;
+    width: 100%;
+    height: 3rem;
+    margin-top: 3rem;
+    /* border-bottom: 1px solid rgb(255, 203, 106); */
+}
+
+.table-title{
+    color: #FFF;
+    margin-left: 1rem;
+    font-weight: 600;
+}
+.table-date{
+    width: 30%;
+}
+.transaction-date{
+    margin-right: 1rem;
+}
+.table-desc{
+    width: 40%;
 }

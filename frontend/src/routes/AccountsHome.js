@@ -81,7 +81,8 @@ const AccountsHome = ({deleteAccount}) => {
 
                 <div className="ProfileHome-accounts">
                     <div className="ProfileHome-accounts-title">My Accounts</div>
-                    <div className="ProfileHome-accounts-card">
+
+                    <div className="ProfileHome-accounts-card-wrap">
                         {accounts.map(account => (
                             <AccountCard 
                                 id={account.id}
@@ -91,7 +92,10 @@ const AccountsHome = ({deleteAccount}) => {
                                 deleteAccount={deleteAccount}
                             />
                         ))}
-                        <div className="add-account-btn" onClick={handleClick}>Add Account</div>
+                        <div className="ProfileHome-accounts-btn-wrap">
+                            <div className="add-account-btn" onClick={handleClick}>Add Account</div>
+                        </div>
+                
                     </div>
                 </div>
 
