@@ -83,26 +83,20 @@ VALUES (
 
 INSERT INTO transactions
 (
-    acc_recieving_id,
+    acc_receiving_id,
     acc_sending_id,
     amount,
-    transaction_date,
-    billing_period,
-    transaction_type
+    transaction_date
 )
 VALUES(
     1,
     2,
     500,
-    '2021-11-19',
-    11,
-    'wire'
+    '2021-11-19'
 ),
 (
     1,
     2,
     1000,
-    '2021-10-14',
-    10,
-    'ACH'
+    '2021-10-14'
 );

@@ -14,7 +14,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../UserContext';
 import LightWireAPI from '../LightWireAPI';
-import Account from './Account';
+import AccountCard from './AccountCard';
 import Transaction from './Transaction';
 
 
@@ -83,7 +83,7 @@ const AccountsHome = ({deleteAccount}) => {
                     <div className="ProfileHome-accounts-title">My Accounts</div>
                     <div className="ProfileHome-accounts-card">
                         {accounts.map(account => (
-                            <Account 
+                            <AccountCard 
                                 id={account.id}
                                 balance={account.balance} 
                                 type={account.account_type} 

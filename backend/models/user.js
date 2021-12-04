@@ -52,7 +52,7 @@ class User{
             }
         }
         throw new UnauthorizedError("Unauthorized: Invalid username/password")
-    }
+    };
 
     /**
      * Registers a new user
@@ -102,7 +102,7 @@ class User{
         catch(e){
             throw new ExpressError('User.register Error')
         }
-    }
+    };
 
 
     /**
@@ -128,7 +128,7 @@ class User{
         catch(e){
             throw new ExpressError('getAll() Error')
         }
-    }
+    };
 
     /**
      * Retrieves a user by username (if same user or admin)
@@ -154,7 +154,7 @@ class User{
         catch(e){
             throw new ExpressError('getByUsername() Error')
         }
-    }
+    };
 
     /**
      * Partial update of user (if same user or admin)
@@ -191,7 +191,7 @@ class User{
         //we don't want password being displayed on other end
         delete user.password;
         return user;
-    }
+    };
 
     /**
      * Delete a user by username (if same user or admin)
@@ -210,7 +210,7 @@ class User{
       const user = result.rows[0];
   
       if (!user) throw new NotFoundError(`No user: ${username}`);
-    }
+    };
 
     static async getAccounts(username){
         try{
@@ -232,7 +232,7 @@ class User{
         catch(e){
             throw new ExpressError('getAccounts Error')
         }
-    }
+    };
 
     static async createAccount(accountObj){
         console.log('In createAccount()')
@@ -271,7 +271,7 @@ class User{
         catch(e){
             throw new ExpressError('createAccount Error')
         }
-    }
+    };
 
     static async removeAccount(id){
         console.log('In removeAccount()')
@@ -287,7 +287,104 @@ class User{
         catch(e){
             throw new ExpressError('removeAccount Error')
         }
-    }
+    };
+
+    static async createTransaction(accountObj){
+        console.log('In createTransaction()', accountObj)
+
+        const {acc_receiving_id, acc_sending_id, amount, transaction_date} = accountObj
+
+        try{
+            let results = await db.query(
+
+                `INSERT INTO transactions
+                (
+                    acc_receiving_id,
+                    acc_sending_id,
+                    amount,
+                    transaction_date
+                )
+                VALUES 
+                    ($1, $2, $3, $4)
+                RETURNING id, acc_receiving_id, acc_sending_id, amount, transaction_date
+                `,
+                [acc_receiving_id, acc_sending_id, amount, transaction_date]
+            )
+            return results.rows
+        }
+        catch(e){
+            throw new ExpressError(e.stack)
+        }
+    };
+
+    static async updateBalances(accountObj){
+        console.log('In updateBalances()', accountObj)
+        
+        const {acc_receiving_id, acc_sending_id, amount} = accountObj
+        let returnObj = {}
+        try{
+            //If there is an account receiving (deposit or transfer)
+            if(acc_receiving_id != undefined){
+                //GET CURRENT BALANCE
+                const balanceResults = await db.query(
+                    `SELECT 
+                        balance
+                    FROM accounts
+                    WHERE id = $1`,
+                    [acc_receiving_id]
+                );
+                const currentBalance = balanceResults.rows[0]
+                const updatedBalance = parseFloat(amount) + parseFloat(currentBalance.balance)
+
+                let results = await db.query(
+                    `UPDATE accounts
+                    SET balance = $1
+                    WHERE id = $2
+                    RETURNING id, balance
+                    `,[updatedBalance, acc_receiving_id]
+                )
+                returnObj.acc_receiving = {
+                    acc_id: acc_receiving_id,
+                    amount_adjusted: amount,
+                    acc_old_balance: currentBalance.balance,
+                    updated_balance: updatedBalance
+                }
+            }
+
+            //If there is an account sending (withdrawal, transfer)
+            if(acc_sending_id != undefined){
+                //GET CURRENT SENDING BALANCE
+                const balanceResults = await db.query(
+                    `SELECT 
+                        balance
+                    FROM accounts
+                    WHERE id = $1`,
+                    [acc_sending_id]
+                );
+                const currentBalance = balanceResults.rows[0]
+                const updatedBalance = parseFloat(currentBalance.balance) - parseFloat(amount)
+                console.log('Updated balance sending ', updatedBalance)
+                
+                let results = await db.query(
+                    `UPDATE accounts
+                    SET balance = $1
+                    WHERE id = $2
+                    RETURNING id, balance
+                    `,[updatedBalance, acc_sending_id]
+                )
+                returnObj.acc_sending = {
+                    acc_id: acc_sending_id,
+                    amount_adjusted: amount,
+                    acc_old_balance: currentBalance.balance,
+                    updated_balance: updatedBalance
+                }
+            }
+            return {returnObj}
+        }
+        catch(e){
+            throw new ExpressError(e.stack)
+        }
+    };
 
 
 }

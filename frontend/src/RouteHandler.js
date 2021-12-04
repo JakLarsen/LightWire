@@ -11,8 +11,6 @@
 
 import React, {useContext} from 'react'
 import {Route, Routes, useNavigate} from 'react-router-dom'
-import LightWireAPI from './LightWireAPI'
-import UserContext from './UserContext'
 
 import Home from './routes/Home'
 import AccountsHome from './routes/AccountsHome'
@@ -23,6 +21,7 @@ import PrivateRoute from './PrivateRoute'
 import UserProfile from './routes/UserProfile';
 import NotFound from './routes/NotFound'
 import AddAccount from './routes/AddAccount'
+import Account from './routes/Account';
 
 
 
@@ -50,7 +49,7 @@ const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount, del
                     exact path="/accounts-home" 
                     element={
                         <PrivateRoute>
-                            <AccountsHome deleteAccount={deleteAccount}/>
+                            <AccountsHome/>
                         </PrivateRoute>
                     }
                 />
@@ -67,6 +66,14 @@ const RouteHandler = ({login, signup, updateUser, deleteUser, createAccount, del
                     element={
                         <PrivateRoute>
                             <AddAccount createAccount={createAccount}/>
+                        </PrivateRoute>
+                    }
+                />
+                 <Route
+                    exact path="/users/:username/account/:id"
+                    element={
+                        <PrivateRoute>
+                            <Account deleteAccount={deleteAccount}/>
                         </PrivateRoute>
                     }
                 />

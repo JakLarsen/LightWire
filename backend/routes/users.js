@@ -42,6 +42,8 @@ router.get('/', ensureAdmin, async (req,res,next) => {
 /**
  * GET '/users/:username'
  * 
+ * Get a user by username
+ * 
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
  **/
@@ -63,7 +65,7 @@ router.get('/:username', ensureCorrectUserOrAdmin, async (req,res,next) => {
 /**
  * PATCH '/users/:username'
  * 
- * Can update first_name, last_name, email, phone
+ * Can update users by first_name, last_name, email, phone
  * 
  * Authorization: Admin or Same User
  * Returns {user: {username: USERNAME, ...}
@@ -123,6 +125,14 @@ router.get('/:username/accounts', ensureCorrectUserOrAdmin, async(req,res,next) 
     }
 });
 
+/**
+ * POST '/users/:username/account
+ * 
+ * Create a new account for a given username
+ * 
+ * Authorization: Admin or Same User
+ * Returns: {account: {username: USERNAME, ...}}
+ **/
 router.post('/:username/account', async (req,res,next) => {
     try{
         const {username} = req.params
@@ -143,6 +153,74 @@ router.post('/:username/account', async (req,res,next) => {
     }
 });
 
+/**
+ * PATCH '/users/:username/account/:id
+ * 
+ * Update account balances after calling to create a transaction
+ * 
+ * Authorization: Admin or Same User
+ * Returns: 
+ **/
+router.patch(`/:username/account/:id`, async (req,res,next) => {
+    try{
+        const accountObj = {
+            acc_receiving_id: req.body.acc_receiving_id,
+            acc_sending_id: req.body.acc_sending_id,
+            amount: req.body.amount
+        }
+        console.log(accountObj)
+        const results = await User.updateBalances(accountObj)
+        return res.json({transaction_complete: results})
+    }
+    catch(e){
+        next(e)
+    }
+});
+
+/**
+ * POST '/users/:username/account/:id/transaction
+ * 
+ * Create a new transaction for a given account id
+ * 
+ * Authorization: Admin or Same User
+ * Returns: }
+ **/
+router.post('/:username/account/:id/transaction', async (req,res,next) => {
+    try{
+        let accountObj = {
+            acc_receiving_id: req.body.acc_receiving_id,
+            acc_sending_id: req.body.acc_sending_id,
+            amount: req.body.amount,
+            transaction_date: req.body.transaction_date
+        }
+        const results = await User.createTransaction(accountObj)
+        const transaction_results = results[0]
+
+        return res.json(
+            {
+                transaction_complete: {
+                    id: transaction_results.id,
+                    acc_receiving_id: transaction_results.acc_receiving_id,
+                    acc_sending_id: transaction_results.acc_sending_id,
+                    amount: transaction_results.amount,
+                    transaction_date: transaction_results.transaction_date
+                } 
+            }
+        )
+    }
+    catch(e){
+        next(e)
+    }
+});
+
+/**
+ * DELETE '/users/:username/account/:id
+ * 
+ * Delete an account for a given username
+ * 
+ * Authorization: Admin or Same User
+ * Returns: {deleted: ACCOUNT_ID}
+ **/
 router.delete('/:username/account/:id', ensureCorrectUserOrAdmin, async(req,res,next) => {
     try{
         const {id} = req.params
@@ -152,7 +230,8 @@ router.delete('/:username/account/:id', ensureCorrectUserOrAdmin, async(req,res,
     catch(e){
         next(e)
     }
-})
+});
+
 
 
 module.exports = router;
