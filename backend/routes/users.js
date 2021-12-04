@@ -186,6 +186,7 @@ router.patch(`/:username/account/:id`, async (req,res,next) => {
  * Returns: }
  **/
 router.post('/:username/account/:id/transaction', async (req,res,next) => {
+    // console.log('IN BACKEND TRANSACTIONS ROUTE')
     try{
         let accountObj = {
             acc_receiving_id: req.body.acc_receiving_id,

@@ -8,7 +8,7 @@ import Transaction from './Transaction';
 
 
 
-const Account = ({deleteAccount}) => {
+const Account = ({deleteAccount, updateBalance}) => {
 
     let navigate = useNavigate()
     const {id} = useParams()
@@ -65,6 +65,94 @@ const Account = ({deleteAccount}) => {
         fetchAccountInfo();
     },[])
 
+    const INITIAL_WITHDRAWAL_FORMDATA = {
+        withdrawal: 0,
+        acc_sending_id: currentAccount.id,
+        acc_receiving_id: currentAccount.id,
+        transaction_date: "12/4/21"
+    }
+    const INITIAL_DEPOSIT_FORMDATA = {
+        deposit: 0,
+        acc_sending_id: currentAccount.id,
+        acc_receiving_id: currentAccount.id,
+        transaction_date: "12/4/21"
+        
+    }
+    const INITIAL_TRANSFER_FORMDATA = {
+        transfer: 0,
+        acc_receiving_id: 0,
+        acc_sending_id: currentAccount.id,
+        transaction_date: "12/4/21"
+    }
+    const INITIAL_FORMERRORS = []
+    const [withdrawalFormData, setWithdrawalFormData] = useState(INITIAL_WITHDRAWAL_FORMDATA)
+    const [depositFormData, setDepositFormData] = useState(INITIAL_DEPOSIT_FORMDATA)
+    const [transferFormData, setTransferFormData] = useState(INITIAL_TRANSFER_FORMDATA)
+    const [formErrors, setFormErrors] = useState(INITIAL_FORMERRORS)
+
+    const handleWithdrawalChange = (e) => {
+        const {name, value} = e.target
+        setWithdrawalFormData(data => ({ ...data, [name]: value}));
+        console.log(name, value)
+    }
+    const handleWithdrawalSubmit = async (e) => {
+        console.debug('handleWithdrawalSubmit() ', withdrawalFormData)
+        e.preventDefault();
+        //Validation
+    
+        //updateBalance from App.js
+        let result = await updateBalance(withdrawalFormData)
+        //Check for form errors from API
+        if (result.success) {
+            navigate("/accounts-home");
+        } 
+        else{
+            setFormErrors(result.errors);
+        }
+    }
+
+    const handleDepositChange = (e) => {
+        const {name, value} = e.target
+        setDepositFormData(data => ({ ...data, [name]: value }));
+        console.log(name, value)
+    }
+    const handleDepositSubmit = async (e) => {
+        console.debug('handleDepositSubmit() ', depositFormData)
+        e.preventDefault();
+        //Validation
+    
+        //updateBalance from App.js
+        let result = await updateBalance(depositFormData)
+        //Check for form errors from API
+        // console.log(`updateBalance result: `, result)
+        if (result.success) {
+            navigate("/accounts-home");
+        } 
+        else{
+            setFormErrors(result.errors);
+        }
+    }
+
+    const handleTransferChange = (e) => {
+        const {name, value} = e.target
+        setTransferFormData(data => ({ ...data, [name]: value }));
+        console.log(name, value)
+    }
+    const handleTransferSubmit = async (e) => {
+        console.debug('handleTransferSubmit() ', transferFormData)
+        e.preventDefault();
+        //Validation
+    
+        //updateBalance from App.js
+        let result = await updateBalance(transferFormData)
+        //Check for form errors from API
+        if (result.success) {
+            navigate("/accounts-home");
+        } 
+        else{
+            setFormErrors(result.errors);
+        }
+    }
 
     if (!infoLoaded) return <LoadingSpinner />;
 
@@ -81,6 +169,65 @@ const Account = ({deleteAccount}) => {
                 <div className="account-interest"><span className="strong">(MO) INTEREST EST:</span> -${(currentAccount.balance*currentAccount.interest).toFixed(2)}</div>
             }
 
+            <div className="account-actions">
+                <div className="account-actions-top">
+                    <div className="account-form-wrap">
+                        <div className="account-form-title">Withdraw</div>
+                        <form className="account-withdrawal" onSubmit={handleWithdrawalSubmit}>
+                            <label className="account-form-label" htmlFor="withdrawal">Withdrawal Amount (USD) </label>
+                            <input 
+                                className="account-form-input" name="withdrawal"
+                                type="number" 
+                                value={withdrawalFormData.withdrawal} onChange={handleWithdrawalChange}
+                            />
+                        <div className="account-transaction-btn" onClick={handleWithdrawalSubmit}>Withdraw</div>
+                    </form>
+
+                    </div>
+    
+                    <div className="account-form-wrap">
+                        <div className="account-form-title">Deposit</div>
+                        <form className="account-deposit">
+                        <label className="account-form-label" htmlFor="deposit">Deposit Amount (USD) </label>
+                            <input 
+                                className="account-form-input" name="deposit"
+                                type="number"
+                                value={depositFormData.deposit} onChange={handleDepositChange}
+                            />
+                            <div className="account-transaction-btn" onClick={handleDepositSubmit}>Deposit</div>
+                        </form>
+                    </div>
+                    <div className="form-errors">{formErrors}</div>
+                
+                </div>
+                <div className="account-actions-bottom">
+                <div className="account-form-wrap">
+                    <div className="account-form-title">Transfer</div>
+                        <form className="account-transfer">
+                            <div className="label-input-wrap account-transfer-label-input-wrap">
+                                <label className="account-form-label" htmlFor="transfer">Transfer Amount (USD) </label>
+                                <input 
+                                    className="account-form-input" name="transfer"
+                                    type="number"
+                                    value={transferFormData.transfer} onChange={handleTransferChange}
+                                />
+                            </div>
+                            <div className="label-input-wrap">
+                                <label className="account-form-label" htmlFor="acc-receiving">To Account # </label>
+                                <input 
+                                    className="account-form-input" name="acc_receiving_id"
+                                    type="number"
+                                    value={transferFormData.acc_receiving_id} onChange={handleTransferChange}
+                                />
+                                <div className="account-transaction-btn" onClick={handleTransferSubmit}>Transfer</div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+
             <div className="account-transactions-wrap">
                 <div className="account-transactions-card">
                     <div className="account-transactions-card-table-titles">
@@ -96,7 +243,7 @@ const Account = ({deleteAccount}) => {
                     <Transaction date={'Nov. 4, 2021'} desc={'PAYPAL'} amount={44.12}/>
                 </div>
             </div>
-            <div className="account-delete-btn" onClick={handleDeleteClick}>Delete Account?</div>
+            <div className="account-delete-btn" onClick={handleDeleteClick}>Close Account</div>
         </div>
     )
 }

@@ -15,7 +15,7 @@ const AccountCard = ({balance, type, id, interest}) => {
     return (
         <div className="account-card">
             <div className="account-card-title">{type.toUpperCase()} ACC: x000{id}</div>
-            <div className="account-card-balance"><span className="strong">BALANCE:</span> ${balance}</div>
+            <div className="account-card-balance"><span className="strong">BALANCE:</span> ${balance.toFixed(2)}</div>
             <div className="account-card-interest"><span className="strong">INTEREST:</span> {interest * 100}.00%</div>
         
             {type != "credit" ? 

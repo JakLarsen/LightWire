@@ -114,6 +114,34 @@ class LightWireAPI {
     return res.data
   }
 
+  static async updateBalance(data, username){
+    console.debug(`LightWireAPI updateBalance()`, data)
+    let amount;
+    const id = data.acc_sending_id
+    if (data.deposit){
+      data.amount = data.deposit
+      delete data.deposit
+      data.acc_sending_id = undefined
+    }
+    else if (data.withdrawal){
+      data.amount = data.withdrawal
+      delete data.withdrawal
+      data.acc_receiving_id = undefined
+    }
+    else if (data.transfer){
+      data.amount = data.transfer
+      delete data.transfer
+    }
+    //Create transaction
+    let transactionRes = await this.request(`users/${username}/account/${id}/transaction`, data, "POST")
+    //Update accounts
+    let balanceRes = await this.request(`users/${username}/account/${id}`, data, "PATCH")
+  }
+
+  // static async getTransactionsByAccountID(data){
+
+  // }
+
 
   
 

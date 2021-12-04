@@ -204,6 +204,23 @@ function App() {
     }
 }
 
+  // UPDATE BALANCE (DEPOSIT, WITHDRAWL, TRANSFER)
+
+  const updateBalance = async(data) => {
+    console.debug('App.js: updateBalance()', data)
+
+    const token = LightWireAPI.token
+    if(!token){
+      setErrors(['Missing Token'])
+      return({errors: 'Missing Token', success: false})
+    }
+    else{
+      console.log('Ready to update balance from API')
+      let res = await LightWireAPI.updateBalance(data, currentUser.username)
+      return ({success: true})
+    }
+  }
+
 
 
   // MAIN APP
@@ -227,6 +244,7 @@ function App() {
             deleteUser={deleteUser}
             createAccount={createAccount}
             deleteAccount={deleteAccount}
+            updateBalance={updateBalance}
           />
         </UserContext.Provider>
       </BrowserRouter>  
