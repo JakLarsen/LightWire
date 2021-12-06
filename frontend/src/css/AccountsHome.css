@@ -1,5 +1,7 @@
-
-
+                    
+                    
+                    
+                    /* ACCOUNTS HOME */
 
 
 
@@ -14,7 +16,7 @@
 
 
 
-    /* TOP LAYOUT */
+            /* TOP LAYOUT */
 
 
 
@@ -54,7 +56,7 @@
 
 
 
-    /* RECENT TRANSACTIONS */
+            /* RECENT TRANSACTIONS */
 
 
 
@@ -106,6 +108,9 @@
 
 
 
+            /* ACCOUNT CARD */
+
+
 
 .ProfileHome-accounts-card-wrap{
     background-color: rgb(69, 112, 101);
@@ -121,6 +126,9 @@
     padding: 2rem;
     box-shadow: 4px 8px 10px rgba(0,0,0,0.3);
 }
+
+
+
 .add-account-btn{
     background-color: #FFF;
     position: relative;
@@ -138,7 +146,6 @@
     cursor: pointer;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
-
 .ProfileHome-accounts-btn-wrap{
     /* background-color: red; */
     width: 100%;

@@ -38,8 +38,6 @@ afterAll(commonAfterAll);
 
 /**
  * GET /users
- * 
- * Works for all
  **/
 describe("User.getAll()", function () {
     test("Works", async function () {

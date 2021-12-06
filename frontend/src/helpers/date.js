@@ -1,8 +1,7 @@
 
 
 
-
-
+// Get and return todays date
 const getDate = () => {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');

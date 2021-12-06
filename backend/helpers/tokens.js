@@ -18,6 +18,12 @@ const { SECRET_KEY, JWT_OPTIONS } = require("../config");
 
 
 
+/**
+ * Create a token for an authenticated user
+ * 
+ * @param {*} user 
+ * @returns signed token with payload data
+ */
 function createToken(user){
   let payload = {
     username: user.username,

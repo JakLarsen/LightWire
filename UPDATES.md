@@ -5,7 +5,6 @@
 
 
 
-- Full Test Suite
 - Documentation
 
 
@@ -14,10 +13,11 @@
 
 
 
+- Full Test Suite
 - Full Form Validation and Error display
 - Full Error Handling
 - CSS Responsiveness at at least 3 stages and inbetween
-- Deployment
+- Deployment to Heroku/Surge
 
 
 
@@ -41,6 +41,8 @@
         - Learn to paginate
         - Have a search to search by month and year to pull up specific statements
 - Create an actual use for the app and niche usage (neobank, etc.)
+- Create a pseudo transfer process to do all of the actual transaction steps an e-commerce app would do
+    - Make sure you can handle the app breaking in different spots during a transaction
 
 
 

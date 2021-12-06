@@ -1,3 +1,14 @@
+
+
+
+                    // ACCOUNT
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React, {useState, useContext, useEffect} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import '../css/Account.css'
@@ -5,6 +16,9 @@ import UserContext from '../UserContext'
 import LoadingSpinner from "../common/LoadingSpinner";
 import Transaction from './Transaction';
 
+
+
+            //ACCOUNT COMPONENT
 
 
 
@@ -23,10 +37,18 @@ const Account = ({deleteAccount, updateBalance}) => {
         account_type: undefined,
         interest: undefined
     }
-
     const [currentAccount, setCurrentAccount] = useState(INITIAL_CURRENT_ACCOUNT)
     const [infoLoaded, setInfoLoaded] = useState(false);
 
+    /**
+     * HANDLE DELETE ACCOUNT BUTTON CLICK
+     * 
+     *  - Calls deleteAccount from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a DELETE request to our API on the backend
+     *  - Which deletes our account
+     *  - deleteAccount() in App.js then calls setAccounts() to give us updated accounts
+     */
     const handleDeleteClick = async (e) => {
         console.debug('Account: handleDeleteClick()')
         e.preventDefault()
@@ -35,19 +57,19 @@ const Account = ({deleteAccount, updateBalance}) => {
             username: currentUser.username,
             id: id
         }
-         // in App.js, deleteAccount()
-         let result = await deleteAccount(dataObj)
-        //  Check for form errors from API
-         console.log(`Delete Account result: `, result)
-         if (result.success) {
-             navigate("/accounts-home");
-         } 
-         else{
-             console.log('Something went wrong')
-         }
+
+        let result = await deleteAccount(dataObj)
+        //Check for form errors from API
+        if (result.success) {
+            navigate("/accounts-home");
+        } 
+        else{
+            //This will be updated with error handling
+            console.log('Something went wrong')
+        }
     }
 
-    //Need to use an infoLoaded catch to make sure we have a returned loading value until the account info loads
+    //LOADING ACCOUNT DATA CATCH
     useEffect( async () => {
         async function fetchAccountInfo(){
             console.debug('fetchAccountInfo(), ', accounts)
@@ -64,6 +86,12 @@ const Account = ({deleteAccount, updateBalance}) => {
         setInfoLoaded(false);
         fetchAccountInfo();
     },[])
+
+
+
+        //STATE FOR OUR FINANCIAL-ACTIONS FORMS
+
+
 
     const INITIAL_WITHDRAWAL_FORMDATA = {
         withdrawal: 0,
@@ -85,22 +113,40 @@ const Account = ({deleteAccount, updateBalance}) => {
         transaction_date: "12/4/21"
     }
     const INITIAL_FORMERRORS = []
+
     const [withdrawalFormData, setWithdrawalFormData] = useState(INITIAL_WITHDRAWAL_FORMDATA)
     const [depositFormData, setDepositFormData] = useState(INITIAL_DEPOSIT_FORMDATA)
     const [transferFormData, setTransferFormData] = useState(INITIAL_TRANSFER_FORMDATA)
     const [formErrors, setFormErrors] = useState(INITIAL_FORMERRORS)
 
+
+
+            //HANDLERS FOR OUR FINANCIAL-ACTIONS FORMS
+
+
+
+        //WITHDRAWAL
+
+
+
     const handleWithdrawalChange = (e) => {
         const {name, value} = e.target
         setWithdrawalFormData(data => ({ ...data, [name]: value}));
-        console.log(name, value)
     }
+    /**
+     * HANDLE WITHDRAWAL FORM SUBMIT
+     * 
+     *  - Calls updateBalance() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which updates balance on our account
+     */
     const handleWithdrawalSubmit = async (e) => {
         console.debug('handleWithdrawalSubmit() ', withdrawalFormData)
         e.preventDefault();
-        //Validation
+
+        //NEED TO VALIDATE
     
-        //updateBalance from App.js
         let result = await updateBalance(withdrawalFormData)
         //Check for form errors from API
         if (result.success) {
@@ -111,20 +157,33 @@ const Account = ({deleteAccount, updateBalance}) => {
         }
     }
 
+
+
+        //DEPOSIT
+
+
+
     const handleDepositChange = (e) => {
         const {name, value} = e.target
         setDepositFormData(data => ({ ...data, [name]: value }));
         console.log(name, value)
     }
+    /**
+     * HANDLE DEPOSIT FORM SUBMIT
+     * 
+     *  - Calls updateBalance() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which updates balance on our account
+     */
     const handleDepositSubmit = async (e) => {
         console.debug('handleDepositSubmit() ', depositFormData)
         e.preventDefault();
-        //Validation
+
+        //NEED TO VALIDATE
     
-        //updateBalance from App.js
         let result = await updateBalance(depositFormData)
         //Check for form errors from API
-        // console.log(`updateBalance result: `, result)
         if (result.success) {
             navigate("/accounts-home");
         } 
@@ -133,17 +192,31 @@ const Account = ({deleteAccount, updateBalance}) => {
         }
     }
 
+
+
+        //TRANSFERS
+
+
+
     const handleTransferChange = (e) => {
         const {name, value} = e.target
         setTransferFormData(data => ({ ...data, [name]: value }));
         console.log(name, value)
     }
+    /**
+     * HANDLE TRANSFER FORM SUBMIT
+     * 
+     *  - Calls updateBalance() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which updates balance on our account
+     */
     const handleTransferSubmit = async (e) => {
         console.debug('handleTransferSubmit() ', transferFormData)
         e.preventDefault();
-        //Validation
+
+        //NEED TO VALIDATE
     
-        //updateBalance from App.js
         let result = await updateBalance(transferFormData)
         //Check for form errors from API
         if (result.success) {
@@ -153,6 +226,12 @@ const Account = ({deleteAccount, updateBalance}) => {
             setFormErrors(result.errors);
         }
     }
+
+
+
+                //RETURNING
+
+
 
     if (!infoLoaded) return <LoadingSpinner />;
 
@@ -247,5 +326,7 @@ const Account = ({deleteAccount, updateBalance}) => {
         </div>
     )
 }
+
+
 
 export default Account

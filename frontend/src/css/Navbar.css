@@ -1,7 +1,10 @@
 
 
 
+                    /* NAVBAR */
 
+
+ 
 .Navbar-logged-out, .Navbar-logged-in{
     background-color: rgb(69, 112, 101);
     color: #FFF;
@@ -48,5 +51,4 @@
     font-size: 1.1rem;
     font-weight: 500;
     margin-left: 1rem;
-
 }

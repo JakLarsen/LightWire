@@ -20,7 +20,7 @@ import Transaction from './Transaction';
 
 
 
-            // COMPONENT
+            // ACCOUNTS HOME COMPONENT
 
 
 
@@ -30,6 +30,10 @@ const AccountsHome = ({deleteAccount}) => {
 
     const { currentUser, setCurrentUser, accounts, setAccounts } = useContext(UserContext);
 
+
+    /**
+     * Loads user accounts data and then sets our data to State before updating page
+     */
     useEffect(async function loadAccountInfo(){
         
         async function getUserAccounts(){
@@ -52,16 +56,29 @@ const AccountsHome = ({deleteAccount}) => {
         getUserAccounts()
     },[])
 
+
+
+                //ADD ACCOUNT BUTTON
+
+
+
     const handleClick = (e) => {
         e.preventDefault()
         navigate(`/users/${currentUser.username}/create-account`)
     }
 
 
+
+                //RETURNING
+
+
+
     return (
         <div className="ProfileHome">
             <div className="ProfileHome-top-wrap">
 
+                {/* TRANSACTIONS WILL BE UPDATED WITH RETRIEVED TRANSACTIONS */}
+                
                 <div className="ProfileHome-recent">
                     <div className="ProfileHome-recent-title">Recent Transactions</div>
                     <div className="ProfileHome-recent-card">
@@ -98,11 +115,12 @@ const AccountsHome = ({deleteAccount}) => {
                 
                     </div>
                 </div>
-
             </div>
-            
         </div>
     )
+
 }
+
+
 
 export default AccountsHome

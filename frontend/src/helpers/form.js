@@ -26,6 +26,8 @@ const validateForm = async (formData) => {
     return formErrors
 }
 
+
+// Get interest rate based on account type
 const getInterestRate = (account_type) => {
     let interestRate = 0
     if (account_type=='savings') interestRate = 0.02

@@ -87,6 +87,7 @@ const RouteHandler = (
 
                 {/* 404 CATCH */}
                 <Route path="*" element={<NotFound goBack={goBack}/>}/>
+                
             </Routes>
        </div> 
     )

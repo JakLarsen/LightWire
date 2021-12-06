@@ -106,8 +106,9 @@ class User{
 
 
     /**
-     * Retrieves a list of all users (if admin)
+     * Retrieves a list of all users 
      * 
+     * Auth: admin
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
     static async getAll(){
@@ -131,8 +132,9 @@ class User{
     };
 
     /**
-     * Retrieves a user by username (if same user or admin)
+     * Retrieves a user by username 
      * 
+     * Auth Same User OR admin
      * Returns [{username, first_name, last_name, email, phone}, ...]
      **/
     static async getByUsername(username){
@@ -157,9 +159,10 @@ class User{
     };
 
     /**
-     * Partial update of user (if same user or admin)
+     * Partial update of user
      * 
-     * Returns [{username, first_name, last_name, email, phone}, ...]
+     * Auth Same User OR admin
+     * Returns {username, first_name, last_name, email, phone}
      **/
     static async update(username, data) {
         if (data.password) {
@@ -194,9 +197,11 @@ class User{
     };
 
     /**
-     * Delete a user by username (if same user or admin)
+     * Delete a user by username
      * 
-     * Returns [{username, first_name, last_name, email, phone}, ...]
+     * Auth Same User OR admin
+     * No Return, but success is validated by API function calling
+     * Future: Add return here.
      **/
     static async delete(username){
         let result = await db.query(
@@ -212,6 +217,12 @@ class User{
       if (!user) throw new NotFoundError(`No user: ${username}`);
     };
 
+    /**
+     * Get all user accounts for a given username
+     * 
+     * Auth: Same user OR admin
+     * Return {accounts: [{id: ID, balance: BALANCE, ...}, {}, {}]}
+     */
     static async getAccounts(username){
         try{
             const results = await db.query(
@@ -234,10 +245,28 @@ class User{
         }
     };
 
+    /**
+     * Create an account for a given user
+     * 
+     * Auth: Same user OR admin
+     * Returns [
+     * {
+            id: ID,
+            user_id: USER_ID,
+            username: USERNAME,
+            balance: BALANCE,
+            open_date: DATE,
+            account_type: ACCOUNT_TYPE,
+            interest: INTEREST
+        }
+    ]
+     */
     static async createAccount(accountObj){
         console.log('In createAccount()')
         const {username, balance, date, account_type, interest} = accountObj
         try{
+
+            //Get the user (could also getByUsername())
             const userResults = await db.query(
                 `SELECT 
                     id,
@@ -249,6 +278,7 @@ class User{
 
             const userID = userResults.rows[0].id
 
+            //Create an account for that user
             const results = await db.query(
                 `INSERT INTO accounts
                 (
@@ -265,6 +295,7 @@ class User{
                 `,
                 [userID, username, balance, date, account_type, interest]
             )
+            console.log('CREATE ACCOUNT RETURN', results.rows)
             return results.rows
         }
 
@@ -273,6 +304,13 @@ class User{
         }
     };
 
+
+    /**
+     * Delete an account for a user
+     * 
+     * Auth: Same user OR admin
+     * No Return
+     */
     static async removeAccount(id){
         console.log('In removeAccount()')
 
@@ -289,6 +327,12 @@ class User{
         }
     };
 
+    /**
+     * Create a transaction on a user account or between two users
+     * 
+     * Auth: Logged-in
+     * Returns [{acc_receiving_id: ACC_RECEIVING_ID, ...} ]
+     */
     static async createTransaction(accountObj){
         console.log('In createTransaction()', accountObj)
 
@@ -317,6 +361,33 @@ class User{
         }
     };
 
+    /**
+     * Update balances of one or two accounts based on transaction type
+     * - Deposits and withdrawals handled by checking for missing object properties
+     * - Transfers handled by doing a withdrawal and a deposit essentially
+     * 
+     * Auth: Logged-in
+     * Returns: {
+     *  returnObj: 
+     *  {
+     *      acc_receiving: 
+     *          {
+     *              acc_id: ACC_RECEIVING_ID
+     *              amount_adjusted: amount,
+                    acc_old_balance: currentBalance.balance,
+                    updated_balance: updatedBalance
+                }
+     *      acc_sending:
+     *          {
+                    acc_id: ACC_SENDING_ID,
+                    amount_adjusted: amount,
+                    acc_old_balance: currentBalance.balance,
+                    updated_balance: updatedBalance
+                }
+     *  }
+     * }
+     * Could just return an object of the receiving and sending objects
+     */
     static async updateBalances(accountObj){
         console.log('In updateBalances()', accountObj)
         

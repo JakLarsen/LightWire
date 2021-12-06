@@ -46,9 +46,6 @@ const Navbar = () => {
     }
 
     function loggedIn(){
-
-
-
         return (
             <div className="Navbar-logged-in">
                 <div className="Navbar-left">
