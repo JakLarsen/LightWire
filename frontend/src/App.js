@@ -27,6 +27,12 @@ import Navbar from './Navbar';
       
 function App() {
 
+
+
+        //STATE MANAGEMENT
+
+
+
   const INITIAL_USER = undefined 
   const INITIAL_USER_INFO = undefined
   const INITIAL_TOKEN = undefined
@@ -41,8 +47,17 @@ function App() {
 
 
 
-  //LOGIN 
+        //LOGIN 
 
+  /**
+   * Logs a user in
+   * 
+   * - Calls our API to POST a login request to the backend model
+   * - Authenticates that a token was received if successful
+   * - Retrieves the user data from API and sets it in State
+   * 
+   * Returns {success: true} or {success: false, errors: 'Invalid Username or Password'}
+   */
   const login = async (data) => {
     console.debug('App.js: login(), data: ', data)
     
@@ -78,8 +93,17 @@ function App() {
 
 
 
-  //SIGN UP
+        //SIGN UP
 
+  /**
+   * Sign up a user (add a user row to the database)
+   * 
+   * - Calls our API to POST a register request to the backend model
+   * - Authenticates that a token was received if successful
+   * - Retrieves the user data from API and sets it in State
+   * 
+   * Returns {success: true} or {success: false, errors: 'Invalid Form Data'}
+   */
   const signup = async (data) => {
     console.debug('App.js: signup()')
 
@@ -113,8 +137,17 @@ function App() {
 
 
   
-  //UPDATE USER
+        //UPDATE USER
 
+  /**
+   * Updates a user row in the database
+   * 
+   * - Calls our API to UPDATE a user table request to the backend model
+   * - Authenticates that a valid token is on the API
+   * - Updates user data from API and sets it in State
+   * 
+   * Returns {success: true} or {success: false, errors: 'Missing Token'}
+   */
   const updateUser = async (data) => {
     console.debug('App.js: updateUser()')
 
@@ -143,8 +176,17 @@ function App() {
 
 
 
-  //DELETE USER
+        //DELETE USER
 
+  /**
+   * Deletes a user from the database
+   * 
+   * - Calls our API to DELETE a user table request on the backend model
+   * - Authenticates that a valid token is on the API
+   * - Deletes user
+   * 
+   * Returns {success: true} or {success: false, errors: 'Missing Token'}
+   */
   const deleteUser = async () => {
     console.debug('App.js: deleteUser()')
 
@@ -164,8 +206,16 @@ function App() {
 
 
 
-  // CREATE ACCOUNT
+        // CREATE ACCOUNT
 
+  /**
+   *  Create a new account associated with a user in the database
+   * 
+   * - Calls our API to POST an account table request on the backend model
+   * - Authenticates that a valid token is on the API
+   * 
+   * Returns {success: true} or {success: false, errors: 'Missing Token'}
+   */
   const createAccount = async (data) => {
     console.debug('App.js: createAccount()', data)
 
@@ -181,8 +231,18 @@ function App() {
 
   }
 
-  //DELETE ACCOUNT
 
+
+        //DELETE ACCOUNT
+
+  /**
+   *  Delete an account for a user from the database
+   * 
+   * - Calls our API to DELETE an account table request on the backend model
+   * - Authenticates that a valid token is on the API
+   * 
+   * Returns {success: true} or {success: false, errors: 'Missing Token'}
+   */
   const deleteAccount =  async(data) => {
     console.debug('App.js: deleteAccount()', data)
 
@@ -202,10 +262,21 @@ function App() {
       setAccounts(newAccounts)
       return ({success: true})
     }
-}
+  }
 
-  // UPDATE BALANCE (DEPOSIT, WITHDRAWL, TRANSFER)
 
+
+        // UPDATE BALANCE (DEPOSIT, WITHDRAWL, TRANSFER)
+
+  /**
+   *  Update an account balance for a given user account
+   * 
+   * - Calls our API to POST a transactions on the backend model
+   * - Then our API calls to partial UPDATE an account's (or two if transfer) balance column(s)
+   * - Authenticates that a valid token is on the API
+   * 
+   * Returns {success: true} or {success: false, errors: 'Missing Token'}
+   */
   const updateBalance = async(data) => {
     console.debug('App.js: updateBalance()', data)
 
@@ -223,7 +294,7 @@ function App() {
 
 
 
-  // MAIN APP
+        // RETURNING MAIN APP
 
 
 
@@ -251,5 +322,7 @@ function App() {
     </div>
   );
 }
+
+
 
 export default App;

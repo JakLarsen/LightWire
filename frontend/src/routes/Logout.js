@@ -1,7 +1,22 @@
+
+
+
+                    //REACT LOGOUT
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React, {useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
 import LightWireAPI from "../LightWireAPI";
+
+
+
+            //LOGOUT COMPONENT
 
 
 
@@ -11,9 +26,9 @@ const Logout = () => {
 
     const {setCurrentUser, setCurrentUserInfo} = useContext(UserContext)
 
-     //LOGOUT
-
-     const logout = () => {
+    //Take the currentUser and token out of State and logout.
+    //Probably can use useEffect here
+    const logout = () => {
         setCurrentUser(undefined)
         setCurrentUserInfo(undefined)
         LightWireAPI.token = "";
@@ -21,11 +36,19 @@ const Logout = () => {
     }
     logout()
 
+
+
+                //RETURNING
+
+
+
     return (
         <div className="Logout">
             <h1>Logged Out</h1>
         </div>
     )
 }
+
+
 
 export default Logout

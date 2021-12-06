@@ -1,6 +1,21 @@
+
+
+
+                    //REACT 404 NOT FOUND
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React from "react"
 import '../css/NotFound.css'
 import '../css/Widgets.css'
+
+
+
+            //404 NOTFOUND COMPONENT
 
 
 

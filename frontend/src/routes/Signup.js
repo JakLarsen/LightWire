@@ -40,20 +40,24 @@ const Signup = ({signup}) => {
         const {name, value} = e.target
         setFormData(data => ({ ...data, [name]: value }));
     }
-
+    /**
+     * HANDLE SIGNUP FORM SUBMIT
+     * 
+     *  - Calls signup() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - To handle signup, authentication, and login
+     */
     const handleSubmit = async (e) =>{
         console.debug('Signup: handleSubmit()')
         e.preventDefault();
 
-        //Gather form data
-        console.log(formData)
         //Validate - basic
         const formErrors = await validateForm(formData)
         if(formErrors != false){
             setFormErrors([formErrors])
         }
         else{
-             //Signup from App.js
             let result = await signup(formData)
             //Check for form errors from API
             console.log(`Signup result: `, result)
@@ -67,7 +71,11 @@ const Signup = ({signup}) => {
     }
 
 
+
+                //RETURNING
     
+
+
     return(
         <div className="Signup">
             <div className="Signup-title">Sign Up</div>
@@ -118,5 +126,7 @@ const Signup = ({signup}) => {
         </div>
     )
 }
+
+
 
 export default Signup

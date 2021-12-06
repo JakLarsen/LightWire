@@ -1,6 +1,20 @@
+
+
+
+                    //REACT TRANSACTION
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React from 'react'
 import '../css/Transaction.css'
 
+
+
+            //TRANSACTION COMPONENT
 
 
 

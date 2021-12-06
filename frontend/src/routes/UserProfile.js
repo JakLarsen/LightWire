@@ -1,8 +1,24 @@
+
+
+
+                    //REACT USER PROFILE PAGE
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React, {useContext, useState} from 'react'
 import UserContext from '../UserContext'
 import '../css/UserProfile.css'
 import { validateForm } from '../helpers/form'
 import { useNavigate } from 'react-router-dom'
+
+
+
+            //USERPROFILE COMPONENT
+
 
 
 const UserProfile = ({updateUser, deleteUser}) => {
@@ -26,20 +42,24 @@ const UserProfile = ({updateUser, deleteUser}) => {
         const {name, value} = e.target
         setFormData(data => ({ ...data, [name]: value }));
     }
-
+    /**
+     * HANDLE UPDATE USERPROFILE FORM SUBMIT
+     * 
+     *  - Calls updateUser() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which updates user details
+     */
     const handleSubmit = async (e) =>{
         console.debug('UserProfile: handleSubmit()')
         e.preventDefault();
 
-        //Gather form data
-        console.log(formData)
         //Validate - basic
         const formErrors = await validateForm(formData)
         if(formErrors != false){
             setFormErrors([formErrors])
         }
         else{
-             //updateUser from App.js
             let result = await updateUser(formData)
             // Check for form errors from API
             console.log(`Update result: `, result)
@@ -51,7 +71,15 @@ const UserProfile = ({updateUser, deleteUser}) => {
             }
         }
     }
-
+    /**
+     * HANDLE DELETE USERPROFILE FORM SUBMIT
+     * 
+     *  - Calls deleteUser() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which deletes our user from the DB
+     *  - Then logs out
+     */
     const handleDeleteUser = async (e) => {
         console.debug('UserProfile: deleteUser()')
         e.preventDefault();
@@ -70,6 +98,11 @@ const UserProfile = ({updateUser, deleteUser}) => {
             }
         }
     }
+
+
+
+                    //RETURNING
+
 
 
     return (
@@ -109,5 +142,7 @@ const UserProfile = ({updateUser, deleteUser}) => {
         </div>
     )
 }
+
+
 
 export default UserProfile

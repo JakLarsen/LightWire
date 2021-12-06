@@ -1,11 +1,11 @@
           
           
           
-          // REACT LOGIN FORM COMPONENT
+                    // REACT LOGIN FORM COMPONENT
 
 
 
-      // IMPORTS AND SETUP
+            // IMPORTS AND SETUP
 
 
 
@@ -16,7 +16,7 @@ import { validateForm } from '../helpers/form';
 
 
 
-      // COMPONENT
+            // LOGINCOMPONENT
 
 
   
@@ -35,7 +35,14 @@ const Login = ({login}) => {
         const {name, value} = e.target
         setFormData(data => ({ ...data, [name]: value }));
     }
-
+    /**
+     * HANDLE LOGIN FORM SUBMIT
+     * 
+     *  - Calls login() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - To handle authentication and login
+     */
     const handleSubmit = async (e) =>{
         console.debug('Login: handleSubmit()')
 
@@ -55,6 +62,12 @@ const Login = ({login}) => {
             }
         }
     }
+
+
+
+                //RETURNING
+
+
 
     return(
         <div className="Login">
@@ -82,5 +95,7 @@ const Login = ({login}) => {
         </div>
     )
 }
+
+
 
 export default Login

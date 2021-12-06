@@ -1,9 +1,24 @@
+
+
+
+                    //REACT ADD ACCOUNT
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 import React, {useState, useContext} from 'react'
 import UserContext from '../UserContext'
 import '../css/AddAccount.css'
 import {getDate} from '../helpers/date'
 import { getInterestRate, validateForm } from '../helpers/form'
 import { useNavigate } from 'react-router'
+
+
+
+            //ADD ACCOUNT COMPONENT
 
 
 
@@ -30,20 +45,27 @@ const AddAccount = ({createAccount}) => {
         const interest = getInterestRate(value)
         setFormData(data => ({ ...data, [name]: value, interest: interest }));
     }
-
+    /**
+     * HANDLE ADD ACCOUNT FORM SUBMIT
+     * 
+     *  - Calls createAccount() from App.js
+     *  - Which then makes a call to our LightWireAPI
+     *  - Which we use to make a request to our API on the backend
+     *  - Which adds a new account to the DB
+     */
     const handleSubmit = async (e) => {
         console.debug('AddAccount: handleSubmit()')
         e.preventDefault()
 
+        //Basic Validation
         const formErrors = await validateForm(formData)
         if(formErrors != false){
             setFormErrors([formErrors])
         }
         else{
-            // in App.js, createAccount()
             let result = await createAccount(formData)
             //Check for form errors from API
-            console.log(`Signup result: `, result)
+            console.log(`Add account result: `, result)
             if (result.success) {
                 navigate("/accounts-home");
             } 
@@ -51,8 +73,13 @@ const AddAccount = ({createAccount}) => {
                 setFormErrors(result.errors);
             }
         }
-
     }
+
+
+
+                //RETURNING
+
+
 
     return (
 
