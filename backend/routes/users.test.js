@@ -21,6 +21,7 @@ const {
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
+    adminToken
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -36,12 +37,11 @@ afterAll(commonAfterAll);
 
 /**
  * GET /users
- * 
- * Works for all
  **/
 describe("GET /users", function () {
-    test("Works for all initially", async function () {
+    test("Works for admin", async function () {
         const resp = await request(app).get("/users")
+            .set('authorization', `Bearer ${adminToken}`)
         expect(resp.body).toEqual({
             users: 
             [

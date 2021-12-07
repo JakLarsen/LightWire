@@ -10,7 +10,7 @@
 
 
 const express = require('express');
-const ExpressError = require('./expressError')
+const {ExpressError} = require('./expressError')
 const morgan = require('morgan')
 const userRoutes = require('./routes/users')
 const authRoutes = require('./routes/auth')
@@ -60,7 +60,7 @@ app.use((error, req, res, next) => {
     let status = error.status || 500;
     let msg = error.msg || 'No message included.'
 
-    res.json({error: {status: status, msg: msg}, stack: error.stack})
+    res.status(status).json({error: {status: status, msg: msg}, stack: error.stack})
 })
 
 

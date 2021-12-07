@@ -37,7 +37,7 @@ afterAll(commonAfterAll);
 
 
 /**
- * GET /users
+ * User.getAll()
  **/
 describe("User.getAll()", function () {
     test("Works", async function () {

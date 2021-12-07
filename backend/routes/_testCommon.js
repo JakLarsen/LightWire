@@ -12,6 +12,7 @@
 "use strict";
 
 const db = require("../db.js");
+const { createToken } = require("../helpers/tokens");
 
 
 
@@ -65,9 +66,12 @@ async function commonAfterAll() {
   await db.end();
 };
 
+const adminToken = createToken({ username: "admin", is_admin: true });
+
 module.exports = {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  adminToken
 };

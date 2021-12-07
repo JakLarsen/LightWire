@@ -11,7 +11,7 @@
 
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../config');
-const { ExpressError } = require('../expressError');
+const { ExpressError, UnauthorizedError } = require('../expressError');
 
 
 
@@ -26,8 +26,8 @@ const { ExpressError } = require('../expressError');
  * Places the payload data {username: USERNAME, admin: true/false, iat: ### } on res.locals.user
  */
 function authenticateJWT(req,res,next){
-    console.log('Running AUTHENTICATEJWT')
-    console.log(req.headers.authorization)
+    // console.log('Running AUTHENTICATEJWT')
+    // console.log(req.headers.authorization)
     try{
         const authHeader = req.headers && req.headers.authorization;
         if (authHeader) {
@@ -49,9 +49,9 @@ function authenticateJWT(req,res,next){
  * Returns 401 if not logged in.
  */
 function ensureLoggedIn(req,res,next){
-    console.log('RUNNING ENSURELOGGEDIN res.locals.user: ', res.locals.user)
+    // console.log('RUNNING ENSURELOGGEDIN res.locals.user: ', res.locals.user)
     if (!res.locals.user){
-        const e = new ExpressError('Unauthorized attempt to reach endpoint: Not Logged-in', 401)
+        const e = new UnauthorizedError('Unauthorized attempt to reach endpoint: Not Logged-in', 401)
         return next(e);
     }
     else{
@@ -65,7 +65,7 @@ function ensureLoggedIn(req,res,next){
  */
 function ensureAdmin(req, res, next) {
     if (!res.locals.user || !res.locals.user.admin) {
-        const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Admin.', 401)
+        const e = new UnauthorizedError('Unauthorized attempt to reach endpoint. Not Admin.', 401)
         return next(e);
     }
     else{
@@ -78,9 +78,9 @@ function ensureAdmin(req, res, next) {
  * Returns 401 if not same user or admin.
  */
 function ensureCorrectUserOrAdmin(req, res, next) {
-    console.debug('Checking ENSURECORRECTUSERORADMIN req.body: ', req.body)
+    // console.debug('Checking ENSURECORRECTUSERORADMIN req.body: ', req.body)
     if (!(res.locals.user && (res.locals.user.admin || res.locals.user.username === req.params.username))) {
-        const e = new ExpressError('Unauthorized attempt to reach endpoint. Not Same User or Admin.', 401)
+        const e = new UnauthorizedError('Unauthorized attempt to reach endpoint. Not Same User or Admin.', 401)
         return next(e);
     }
     else{

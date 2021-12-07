@@ -361,6 +361,8 @@ class User{
         }
     };
 
+    static delay = (ms) => new Promise(res => setTimeout(res, ms));
+
     /**
      * Update balances of one or two accounts based on transaction type
      * - Deposits and withdrawals handled by checking for missing object properties
@@ -394,9 +396,11 @@ class User{
         const {acc_receiving_id, acc_sending_id, amount} = accountObj
         let returnObj = {}
         try{
-            //If there is an account receiving (deposit or transfer)
-            if(acc_receiving_id != undefined){
-                //GET CURRENT BALANCE
+            //DEPOSIT
+            if(acc_receiving_id != undefined && acc_sending_id == undefined){
+                console.log('In updateBalances() DEPOSIT', accountObj)
+                //GET CURRENT RECEIVING BALANCE
+                const begin = await db.query(`BEGIN;`)
                 const balanceResults = await db.query(
                     `SELECT 
                         balance
@@ -404,6 +408,7 @@ class User{
                     WHERE id = $1`,
                     [acc_receiving_id]
                 );
+                const savePoint = await db.query(`SAVEPOINT my_savepoint;`)
                 const currentBalance = balanceResults.rows[0]
                 const updatedBalance = parseFloat(amount) + parseFloat(currentBalance.balance)
 
@@ -411,19 +416,29 @@ class User{
                     `UPDATE accounts
                     SET balance = $1
                     WHERE id = $2
-                    RETURNING id, balance
-                    `,[updatedBalance, acc_receiving_id]
+                    RETURNING id, balance`,
+                    [updatedBalance, acc_receiving_id]
                 )
+                const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+                const commit = await db.query(`COMMIT;`)
+                if (rollBackTest){
+                    returnObj.rolledBack = rollBackTest
+                }
+                else{
+                    returnObj.rolledBack = 'No Rollback'
+                }
                 returnObj.acc_receiving = {
                     acc_id: acc_receiving_id,
                     amount_adjusted: amount,
                     acc_old_balance: currentBalance.balance,
                     updated_balance: updatedBalance
                 }
+                console.log('RETURN OBJECT DEPOSIT: ', returnObj)
             }
 
-            //If there is an account sending (withdrawal, transfer)
-            if(acc_sending_id != undefined){
+            //WITHDRAWAL
+            else if(acc_sending_id != undefined && acc_receiving_id == undefined){
+                console.log('In updateBalances() WITHDRAWAL', accountObj)
                 //GET CURRENT SENDING BALANCE
                 const balanceResults = await db.query(
                     `SELECT 
@@ -443,6 +458,7 @@ class User{
                     RETURNING id, balance
                     `,[updatedBalance, acc_sending_id]
                 )
+                
                 returnObj.acc_sending = {
                     acc_id: acc_sending_id,
                     amount_adjusted: amount,
@@ -450,6 +466,80 @@ class User{
                     updated_balance: updatedBalance
                 }
             }
+            //TRANSFER
+            else if(acc_sending_id != undefined && acc_receiving_id != undefined){
+                console.log('In updateBalances() TRANSFER', accountObj)
+
+                //GET CURRENT RECEIVING BALANCE
+                const begin = await db.query(`BEGIN;`)
+                const balanceResults = await db.query(
+                    `SELECT 
+                        balance
+                    FROM accounts
+                    WHERE id = $1`,
+                    [acc_receiving_id]
+                );
+                const currentBalance = balanceResults.rows[0]
+                const updatedBalance = parseFloat(amount) + parseFloat(currentBalance.balance)
+
+                let results = await db.query(
+                    `UPDATE accounts
+                    SET balance = $1
+                    WHERE id = $2
+                    RETURNING id, balance
+                    `,[updatedBalance, acc_receiving_id]
+                )
+                const savePoint = await db.query(`SAVEPOINT my_savepoint;`)
+                returnObj.acc_receiving = {
+                    acc_id: acc_receiving_id,
+                    amount_adjusted: amount,
+                    acc_old_balance: currentBalance.balance,
+                    updated_balance: updatedBalance
+                }
+
+
+                // console.log('BEFORE DELAY')
+                // await delay(3000);
+                // console.log('AFTER DELAY')
+
+
+
+                //GET CURRENT SENDING BALANCE
+                const balanceResults_sending = await db.query(
+                    `SELECT 
+                        balance
+                    FROM accounts
+                    WHERE id = $1`,
+                    [acc_sending_id]
+                );
+                const currentBalance_sending = balanceResults_sending.rows[0]
+                const updatedBalance_sending = parseFloat(currentBalance_sending.balance) - parseFloat(amount)
+                console.log('Updated balance sending ', updatedBalance_sending)
+                
+                let results_sending = await db.query(
+                    `UPDATE accounts
+                    SET balance = $1
+                    WHERE id = $2
+                    RETURNING id, balance
+                    `,[updatedBalance_sending, acc_sending_id]
+                )
+                // const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+                const commit = await db.query(`COMMIT;`)
+                if (rollBackTest){
+                    returnObj.rolledBack = rollBackTest
+                }
+                else{
+                    returnObj.rolledBack = 'No Rollback'
+                }
+                returnObj.acc_sending = {
+                    acc_id: acc_sending_id,
+                    amount_adjusted: amount,
+                    acc_old_balance: currentBalance_sending.balance,
+                    updated_balance: updatedBalance_sending
+                }
+                console.log('RETURNOBJ TRANSFER: ', returnObj)
+            }
+
             return {returnObj}
         }
         catch(e){
