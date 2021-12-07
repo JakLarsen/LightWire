@@ -1,3 +1,14 @@
+
+
+
+                    //AUTH TESTING
+
+
+
+            //IMPORTS AND SETUP
+
+
+
 "use strict";
 
 const jwt = require("jsonwebtoken");
@@ -8,15 +19,20 @@ const {
   ensureAdmin,
   ensureCorrectUserOrAdmin,
 } = require("./auth");
-
-
 const { SECRET_KEY } = require("../config");
 const testJwt = jwt.sign({ username: "test", admin: false }, SECRET_KEY);
 const badJwt = jwt.sign({ username: "test", admin: false }, "wrong");
 
 
+
+            // TESTS
+
+
+/**
+ * authenticateJWT()
+ */
 describe("authenticateJWT", function () {
-  test("works: via header", function () {
+  test("Works: via header .authorization property", function () {
     expect.assertions(2);
     const req = { headers: { authorization: `Bearer ${testJwt}` } };
     const res = { locals: {} };
@@ -32,8 +48,7 @@ describe("authenticateJWT", function () {
       },
     });
   });
-
-  test("works: no header", function () {
+  test("Works: no header", function () {
     expect.assertions(2);
     const req = {};
     const res = { locals: {} };
@@ -43,8 +58,7 @@ describe("authenticateJWT", function () {
     authenticateJWT(req, res, next);
     expect(res.locals).toEqual({});
   });
-
-  test("works: invalid token", function () {
+  test("Works: invalid token", function () {
     expect.assertions(2);
     const req = { headers: { authorization: `Bearer ${badJwt}` } };
     const res = { locals: {} };
@@ -56,7 +70,9 @@ describe("authenticateJWT", function () {
   });
 });
 
-
+/**
+ * ensureLoggedIn()
+ */
 describe("ensureLoggedIn", function () {
   test("works", function () {
     expect.assertions(1);
@@ -67,8 +83,7 @@ describe("ensureLoggedIn", function () {
     };
     ensureLoggedIn(req, res, next);
   });
-
-  test("unauth if no login", function () {
+  test("UnauthorizationError if no login", function () {
     expect.assertions(1);
     const req = {};
     const res = { locals: {} };
@@ -79,7 +94,9 @@ describe("ensureLoggedIn", function () {
   });
 });
 
-
+/**
+ * ensureAdmin()
+ */
 describe("ensureAdmin", function () {
   test("works", function () {
     expect.assertions(1);
@@ -90,7 +107,6 @@ describe("ensureAdmin", function () {
     };
     ensureAdmin(req, res, next);
   });
-  
   test('UnauthorizationError if not admin', function() {
     expect.assertions(1);
     const req = {};
@@ -100,7 +116,6 @@ describe("ensureAdmin", function () {
     }
     ensureAdmin(req, res, next);
   });
-
   test('UnauthorizationError if no user', function(){
     expect.assertions(1);
     const req = {};
@@ -110,12 +125,13 @@ describe("ensureAdmin", function () {
     }
     ensureAdmin(req,res,next);
   });
-
 });
 
-
+/**
+ * ensureCorrectUserOrAdmin()
+ */
 describe("ensureCorrectUserOrAdmin", function () {
-  test("works: admin", function () {
+  test("Works: admin", function () {
     expect.assertions(1);
     const req = { params: { username: "test" } };
     const res = { locals: { user: { username: "admin", admin: true } } };
@@ -124,8 +140,7 @@ describe("ensureCorrectUserOrAdmin", function () {
     };
     ensureCorrectUserOrAdmin(req, res, next);
   });
-
-  test("works: same user", function () {
+  test("Works: same user", function () {
     expect.assertions(1);
     const req = { params: { username: "test" } };
     const res = { locals: { user: { username: "test", admin: false } } };
@@ -134,8 +149,7 @@ describe("ensureCorrectUserOrAdmin", function () {
     };
     ensureCorrectUserOrAdmin(req, res, next);
   });
-
-  test("unauth: mismatch", function () {
+  test("UnauthorizationError if not same user", function () {
     expect.assertions(1);
     const req = { params: { username: "wrong" } };
     const res = { locals: { user: { username: "test", admin: false } } };
@@ -144,8 +158,7 @@ describe("ensureCorrectUserOrAdmin", function () {
     };
     ensureCorrectUserOrAdmin(req, res, next);
   });
-
-  test("unauth: if anon", function () {
+  test("UnauthorizationError if no user object", function () {
     expect.assertions(1);
     const req = { params: { username: "test" } };
     const res = { locals: {} };
