@@ -568,3 +568,6 @@ describe('User.updateBalances()', function(){
     });
 });
 
+//Hybernate SQL
+//Explore throwing Runtime Errors inbetween queries
+

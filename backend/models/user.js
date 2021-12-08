@@ -510,6 +510,13 @@ class User{
                     updated_balance: updatedBalance
                 }
 
+                //Throw runtime for testing = (SIMPLE way) (i.e. if (testing) throw Runtime)
+                // if (testing){
+                //     throw ExpressError('Testing rollback', 500)
+                // }
+                //Correct way - use HybernateSQL or a similar library for javascript
+                
+
                 //GET CURRENT SENDING BALANCE
                 const balanceResults_sending = await db.query(
                     `SELECT 
@@ -531,7 +538,7 @@ class User{
                 )
 
                 //FOR TESTING
-                // accountObj.rollback_savepoint = 1
+                accountObj.rollback_savepoint = 1
                 //This rollsback entire transaction
                 if (accountObj.rollback_savepoint == 1){
                     const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
