@@ -11,8 +11,8 @@ class ExpressError extends Error{
         this.msg = msg;
         this.status = status;
 
-        //stack property defined on every Error instance
-        console.error(this.stack)
+        // //stack property defined on every Error instance
+        // console.error(this.stack)
     }
 }
 

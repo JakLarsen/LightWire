@@ -18,7 +18,10 @@ const { SECRET_KEY } = require("../config");
             // TESTS
 
 
-
+            
+/**
+ * createToken()
+ */
 describe("createToken", function () {
   test("works: not admin", function () {
     const token = createToken({ username: "test", is_admin: false});
@@ -29,8 +32,7 @@ describe("createToken", function () {
       admin: false,
     });
   });
-
-  test("works: admin", function () {
+  test("Works: admin", function () {
     const token = createToken({ username: "test", is_admin: true});
     const payload = jwt.verify(token, SECRET_KEY);
     expect(payload).toEqual({
@@ -39,8 +41,7 @@ describe("createToken", function () {
       admin: true,
     });
   });
-
-  test("works: default; not admin", function () {
+  test("Works: default; not admin", function () {
     // given the security risk if this didn't work, checking this specifically
     const token = createToken({ username: "test"});
     const payload = jwt.verify(token, SECRET_KEY);

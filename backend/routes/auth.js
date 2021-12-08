@@ -109,39 +109,39 @@ router.post('/login', async (req,res,next)=>{
     }
 });
 
-/**
- * GET '/auth/testlogin'
- * 
- * Tests token authorization for logged-in endpoint security
- * 
- * Authorization: Logged-in +
- * Returns {msg: 'You hit a logged-in endpoint! Welcome, USERNAME.'}
- **/
-router.get('/testlogin', ensureLoggedIn, async (req,res,next)=>{
-    try{
-        return res.status(200).json({msg: `You hit a logged-in endpoint! Welcome, ${req.user.username}`})
-    }
-    catch(e){
-       next(e)
-    }
-})
+// /**
+//  * GET '/auth/testlogin'
+//  * 
+//  * Tests token authorization for logged-in endpoint security
+//  * 
+//  * Authorization: Logged-in +
+//  * Returns {msg: 'You hit a logged-in endpoint! Welcome, USERNAME.'}
+//  **/
+// router.get('/testlogin', ensureLoggedIn, async (req,res,next)=>{
+//     try{
+//         return res.status(200).json({msg: `You hit a logged-in endpoint! Welcome, ${req.user.username}`})
+//     }
+//     catch(e){
+//        next(e)
+//     }
+// })
 
-/**
- * GET '/auth/testadmin'
- * 
- * Tests authorization for admin endpoint security
- * 
- * Authorization: Admin +
- * Returns {msg: 'You hit an admin endpoint! Welcome, USERNAME.'}
- **/
- router.get('/testadmin', ensureAdmin, async (req,res,next)=>{
-    try{
-        return res.status(200).json({msg: `You hit an admin endpoint! Welcome, ${req.user.username}`})
-    }
-    catch(e){
-       next(e)
-    }
-})
+// /**
+//  * GET '/auth/testadmin'
+//  * 
+//  * Tests authorization for admin endpoint security
+//  * 
+//  * Authorization: Admin +
+//  * Returns {msg: 'You hit an admin endpoint! Welcome, USERNAME.'}
+//  **/
+//  router.get('/testadmin', ensureAdmin, async (req,res,next)=>{
+//     try{
+//         return res.status(200).json({msg: `You hit an admin endpoint! Welcome, ${req.user.username}`})
+//     }
+//     catch(e){
+//        next(e)
+//     }
+// })
 
 
 

@@ -6,6 +6,10 @@
 
  - FRONTEND STARTUP (from frontend root)
     -   ### `npm start`
+ - FRONTEND TESTING (from frontend root)
+    -   ### `npm test`
     
  - BACKEND STARTUP (from backend root)
     -   ### `nodemon server.js`
+ - BACKEND TESTING (from backend root)
+    -   ### `jest`

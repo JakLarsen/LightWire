@@ -10,7 +10,7 @@
 
 
 const db = require('../db')
-const {UnauthorizedError, NotFoundError, ExpressError} = require('../expressError')
+const {UnauthorizedError, NotFoundError, ExpressError, BadRequestError} = require('../expressError')
 const bcrypt = require('bcrypt')
 const { BCRYPT_WORK_FACTOR } = require('../config');
 const {sqlForPartialUpdate} = require('../helpers/sql')
@@ -69,7 +69,7 @@ class User{
               [username],
             )
             if (duplicateCheck.rows[0]) {
-                throw new ExpressError(`Duplicate username: ${username}`);
+                throw new BadRequestError(`Duplicate username: ${username}`);
             }
 
             const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR)
@@ -93,10 +93,11 @@ class User{
                     first_name, 
                     last_name, 
                     email, 
-                    phone]
+                    phone
+                ]
             )
             const ourUser = results.rows[0]
-            console.log(ourUser)
+            // console.log(ourUser)
             return ourUser
         }
         catch(e){
@@ -165,35 +166,40 @@ class User{
      * Returns {username, first_name, last_name, email, phone}
      **/
     static async update(username, data) {
-        if (data.password) {
-          data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        try{
+            if (data.password) {
+                data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+            }
+    
+            const { setCols, values } = sqlForPartialUpdate(
+                data,
+                {
+                firstName: "first_name",
+                lastName: "last_name",
+                isAdmin: "is_admin",
+                });
+            const usernameVarIdx = "$" + (values.length + 1);
+        
+            const querySql = `UPDATE users 
+                            SET ${setCols} 
+                            WHERE username = ${usernameVarIdx} 
+                            RETURNING username,
+                                        first_name,
+                                        last_name,
+                                        email,
+                                        phone`;
+            const result = await db.query(querySql, [...values, username]);
+            const user = result.rows[0];
+        
+            if (!user) throw new NotFoundError(`No user: ${username} found.`);
+        
+            //we don't want password being displayed on other end
+            delete user.password;
+            return user;
         }
-    
-        const { setCols, values } = sqlForPartialUpdate(
-            data,
-            {
-              firstName: "first_name",
-              lastName: "last_name",
-              isAdmin: "is_admin",
-            });
-        const usernameVarIdx = "$" + (values.length + 1);
-    
-        const querySql = `UPDATE users 
-                          SET ${setCols} 
-                          WHERE username = ${usernameVarIdx} 
-                          RETURNING username,
-                                    first_name,
-                                    last_name,
-                                    email,
-                                    phone`;
-        const result = await db.query(querySql, [...values, username]);
-        const user = result.rows[0];
-    
-        if (!user) throw new NotFoundError(`No user: ${username} found.`);
-    
-        //we don't want password being displayed on other end
-        delete user.password;
-        return user;
+        catch(e){
+            throw new ExpressError('update() Error')
+        }
     };
 
     /**
@@ -204,17 +210,23 @@ class User{
      * Future: Add return here.
      **/
     static async delete(username){
-        let result = await db.query(
+        try{
+            let result = await db.query(
             `DELETE
              FROM users
              WHERE username = $1
              RETURNING username`,
-          [username],
-      );
-      
-      const user = result.rows[0];
-  
-      if (!user) throw new NotFoundError(`No user: ${username}`);
+            [username],
+            );
+        
+            const user = result.rows[0];
+        
+            if (!user) throw new NotFoundError(`No user: ${username}`);
+        }
+        catch(e){
+            throw new ExpressError('delete() Error') 
+        }
+        
     };
 
     /**
@@ -295,7 +307,7 @@ class User{
                 `,
                 [userID, username, balance, date, account_type, interest]
             )
-            console.log('CREATE ACCOUNT RETURN', results.rows)
+            // console.log('CREATE ACCOUNT RETURN', results.rows)
             return results.rows
         }
 
@@ -323,7 +335,7 @@ class User{
             )
         }
         catch(e){
-            throw new ExpressError('removeAccount Error')
+            throw new ExpressError('removeAccount() Error')
         }
     };
 
@@ -357,11 +369,11 @@ class User{
             return results.rows
         }
         catch(e){
-            throw new ExpressError(e.stack)
+            throw new ExpressError('createTransaction() Error')
         }
     };
 
-    static delay = (ms) => new Promise(res => setTimeout(res, ms));
+    // static delay = (ms) => new Promise(res => setTimeout(res, ms));
 
     /**
      * Update balances of one or two accounts based on transaction type
@@ -408,7 +420,7 @@ class User{
                     WHERE id = $1`,
                     [acc_receiving_id]
                 );
-                const savePoint = await db.query(`SAVEPOINT my_savepoint;`)
+                // const savePoint = await db.query(`SAVEPOINT my_savepoint;`)
                 const currentBalance = balanceResults.rows[0]
                 const updatedBalance = parseFloat(amount) + parseFloat(currentBalance.balance)
 
@@ -419,14 +431,14 @@ class User{
                     RETURNING id, balance`,
                     [updatedBalance, acc_receiving_id]
                 )
-                const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+                // const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
                 const commit = await db.query(`COMMIT;`)
-                if (rollBackTest){
-                    returnObj.rolledBack = rollBackTest
-                }
-                else{
-                    returnObj.rolledBack = 'No Rollback'
-                }
+                // if (rollBackTest){
+                //     returnObj.rolledBack = rollBackTest
+                // }
+                // else{
+                //     returnObj.rolledBack = 'No Rollback'
+                // }
                 returnObj.acc_receiving = {
                     acc_id: acc_receiving_id,
                     amount_adjusted: amount,
@@ -472,6 +484,7 @@ class User{
 
                 //GET CURRENT RECEIVING BALANCE
                 const begin = await db.query(`BEGIN;`)
+                const savePointFirst = await db.query(`SAVEPOINT my_savepoint;`)
                 const balanceResults = await db.query(
                     `SELECT 
                         balance
@@ -489,20 +502,13 @@ class User{
                     RETURNING id, balance
                     `,[updatedBalance, acc_receiving_id]
                 )
-                const savePoint = await db.query(`SAVEPOINT my_savepoint;`)
+                const savePointSecond = await db.query(`SAVEPOINT my_second_savepoint;`)
                 returnObj.acc_receiving = {
                     acc_id: acc_receiving_id,
                     amount_adjusted: amount,
                     acc_old_balance: currentBalance.balance,
                     updated_balance: updatedBalance
                 }
-
-
-                // console.log('BEFORE DELAY')
-                // await delay(3000);
-                // console.log('AFTER DELAY')
-
-
 
                 //GET CURRENT SENDING BALANCE
                 const balanceResults_sending = await db.query(
@@ -523,14 +529,19 @@ class User{
                     RETURNING id, balance
                     `,[updatedBalance_sending, acc_sending_id]
                 )
-                // const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+
+                //FOR TESTING
+                // accountObj.rollback_savepoint = 1
+                //This rollsback entire transaction
+                if (accountObj.rollback_savepoint == 1){
+                    const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+                }
+                //This rollsback to after the deposit into the receiving acc but before withdrawal from the sending
+                else if (accountObj.rollback_savepoint == 2){
+                    const rollBackTest = await db.query(`ROLLBACK TO my_second_savepoint;`)
+                }
+
                 const commit = await db.query(`COMMIT;`)
-                if (rollBackTest){
-                    returnObj.rolledBack = rollBackTest
-                }
-                else{
-                    returnObj.rolledBack = 'No Rollback'
-                }
                 returnObj.acc_sending = {
                     acc_id: acc_sending_id,
                     amount_adjusted: amount,
@@ -543,6 +554,9 @@ class User{
             return {returnObj}
         }
         catch(e){
+            console.log('TRANSACTION INTERRUPTED')
+            const rollBackTest = await db.query(`ROLLBACK TO my_savepoint;`)
+
             throw new ExpressError(e.stack)
         }
     };

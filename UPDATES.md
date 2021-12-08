@@ -14,6 +14,7 @@
 
 
 - Full Test Suite
+- Implementation of TRANSACTIONS with RDBMS as a single unit
 - Full Form Validation and Error display
 - Full Error Handling
 - CSS Responsiveness at at least 3 stages and inbetween

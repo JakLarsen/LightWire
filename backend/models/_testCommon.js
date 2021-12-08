@@ -16,7 +16,7 @@ const db = require("../db.js");
       // COMMON FUNCTIONS
 
 
-    
+//testuser and testadmin passwords are 'password'
 async function commonBeforeAll() {
 
   await db.query("DELETE FROM users");
@@ -57,6 +57,7 @@ async function commonBeforeEach() {
 
 async function commonAfterEach() {
   await db.query("ROLLBACK");
+  await db.query('DELETE FROM accounts')
 };
 
 async function commonAfterAll() {
