@@ -18,12 +18,12 @@
  - The API is run on built with Express and allows you to reach authenticated endpoints by Logged-in User,
  Admin, or as the same user as intended. 
 
- - FRONTEND STARTUP (from frontend root) runs on http://localhost:3001/
+ - FRONTEND STARTUP (from frontend root) runs on http://localhost:3000/
     -   ### `npm start`
  - FRONTEND TESTING (from frontend root)
     -   ### `npm test`
     
- - BACKEND STARTUP (from backend root) runs on http://localhost:3000/
+ - BACKEND STARTUP (from backend root) runs on http://localhost:3001/
     -   ### `nodemon server.js`
  - BACKEND TESTING (from backend root)
     -   ### `jest`, `jest filename.test.js`
